@@ -1,37 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   put_int.c                                          :+:      :+:    :+:   */
+/*   put_address.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/21 14:49:09 by nteechar          #+#    #+#             */
-/*   Updated: 2024/05/28 16:21:04 by nteechar         ###   ########.fr       */
+/*   Created: 2024/03/11 17:24:49 by nteechar          #+#    #+#             */
+/*   Updated: 2024/08/28 14:24:48 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../ft_printf.h"
-#include <limits.h>
+#include "ft_printf.h"
 
-#define INT_MIN_STRING "-2147483648"
-
-unsigned int	put_int(int n)
+unsigned int	put_address(void *ptr)
 {
 	unsigned int	length_printed;
 
 	length_printed = 0;
-	if (n == INT_MIN)
+	if (ptr == NULL)
 	{
-		length_printed += put_str(INT_MIN_STRING);
+		length_printed += put_str("(nil)");
 		return (length_printed);
 	}
-	if (n < 0)
-	{
-		length_printed += put_char('-');
-		n *= -1;
-	}
-	if (n >= 10)
-		length_printed += put_int(n / 10);
-	length_printed += put_char(n % 10 + '0');
+	length_printed += put_str("0x");
+	length_printed += put_hex((size_t) ptr, 0);
 	return (length_printed);
 }

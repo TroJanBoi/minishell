@@ -1,31 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   put_str.c                                          :+:      :+:    :+:   */
+/*   put_int.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/21 14:42:55 by nteechar          #+#    #+#             */
-/*   Updated: 2024/05/28 16:10:11 by nteechar         ###   ########.fr       */
+/*   Created: 2024/02/21 14:49:09 by nteechar          #+#    #+#             */
+/*   Updated: 2024/08/28 14:25:02 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../ft_printf.h"
+#include "ft_printf.h"
+#include <limits.h>
 
-unsigned int	put_str(const char *s)
+#define INT_MIN_STRING "-2147483648"
+
+unsigned int	put_int(int n)
 {
 	unsigned int	length_printed;
 
 	length_printed = 0;
-	if (s == NULL)
+	if (n == INT_MIN)
 	{
-		length_printed += put_str("(null)");
+		length_printed += put_str(INT_MIN_STRING);
 		return (length_printed);
 	}
-	while (*s != '\0')
+	if (n < 0)
 	{
-		length_printed += put_char(*s);
-		s++;
+		length_printed += put_char('-');
+		n *= -1;
 	}
+	if (n >= 10)
+		length_printed += put_int(n / 10);
+	length_printed += put_char(n % 10 + '0');
 	return (length_printed);
 }

@@ -6,11 +6,11 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:11:33 by nteechar          #+#    #+#             */
-/*   Updated: 2024/05/28 16:58:14 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:24:59 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../ft_printf.h"
+#include "ft_printf.h"
 
 // only takes 0 <= n <= 15
 static char	convert_to_upper_hex(unsigned int n)

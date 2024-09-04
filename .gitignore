@@ -1,0 +1,10 @@
+# binaries
+*.o
+*.a
+
+# personal
+LOGS
+DEBUG
+
+# weird files that I don't understand
+.vscode

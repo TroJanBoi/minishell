@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 14:50:46 by nteechar          #+#    #+#             */
-/*   Updated: 2024/05/26 14:36:37 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/09/04 12:58:03 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*ft_itoa(int n)
 	long	num;
 
 	length = count_number_length(n);
-	str = malloc(length + 1);
+	str = malloc((length + 1) * sizeof(char));
 	if (str == NULL)
 		return (NULL);
 	str[length--] = '\0';

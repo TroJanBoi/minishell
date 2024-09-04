@@ -6,28 +6,25 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 14:27:02 by nteechar          #+#    #+#             */
-/*   Updated: 2024/07/27 14:11:37 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/07/31 14:31:55 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
 size_t	ft_strlen(const char *s);
+void	*ft_memcpy(void *dest, const void *src, size_t n);
 
 char	*ft_strdup(const char *s)
 {
 	char	*new_string;
-	size_t	i;
+	size_t	length;
 
-	new_string = malloc(ft_strlen(s) + 1);
+	length = ft_strlen(s);
+	new_string = malloc(length + 1);
 	if (new_string == NULL)
 		return (NULL);
-	i = 0;
-	while (s[i] != '\0')
-	{
-		new_string[i] = s[i];
-		i++;
-	}
-	new_string[i] = '\0';
+	ft_memcpy(new_string, s, length);
+	new_string[length] = '\0';
 	return (new_string);
 }

@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   put_unsigned_int.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/05 13:54:32 by nteechar          #+#    #+#             */
-/*   Updated: 2024/07/30 18:50:27 by nteechar         ###   ########.fr       */
+/*   Created: 2024/03/11 17:03:39 by nteechar          #+#    #+#             */
+/*   Updated: 2024/08/28 14:25:07 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "t_list.h"
+#include "ft_printf.h"
 
-// if del function is NULL, do nothing with the lst->content
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
+unsigned int	put_unsigned_int(unsigned int n)
 {
-	if (lst == NULL)
-		return ;
-	if (del != NULL)
-		del(lst->content);
-	free(lst);
+	unsigned int	length_printed;
+
+	length_printed = 0;
+	if (n >= 10)
+		length_printed += put_unsigned_int(n / 10);
+	length_printed += put_char(n % 10 + '0');
+	return (length_printed);
 }

@@ -3,35 +3,43 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
+#    By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/27 11:52:43 by nteechar          #+#    #+#              #
-#    Updated: 2024/07/27 15:08:51 by nteechar         ###   ########.fr        #
+#    Updated: 2024/09/02 19:35:31 by pesrisaw         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 CC = cc
-#CFLAGS = -Wall -Wextra -Werror
+# CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g
 RM = rm -rf
-LFLAGS = -L/usr/include -lreadline
+LFLAGS = -L/usr/include -lreadline -lhistory
 
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-HEADERS = header.h
-SOURCES = main.c
-OBJECTS = $(SOURCES:%.c=%.o)
+SRCS =	main.c \
+		signal.c
+OBJS = $(SRCS:%.c=%.o)
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) $(LIBFT) $(LFLAGS) -o $(NAME)
+$(NAME): $(LIBFT) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(LFLAGS) -o $(NAME)
+
+$(LIBFT):
+	make -C $(LIBFT_DIR)
+
+%.o: %.c $(HEADERS)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	make clean -C $(LIBFT_DIR)
-	$(RM) $(OBJECTS)
+	$(RM) $(OBJS)
+	$(RM) test_program sources/test_program.o
 
 fclean: clean
 	$(RM) $(LIBFT)
@@ -41,8 +49,3 @@ re: fclean all
 
 .PHONY: all clean fclean re
 
-$(LIBFT):
-	make -C $(LIBFT_DIR)
-
-%.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) -c $< -o $@

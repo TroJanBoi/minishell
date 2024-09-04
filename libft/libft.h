@@ -6,16 +6,19 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 14:27:14 by nteechar          #+#    #+#             */
-/*   Updated: 2024/07/27 14:18:16 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:13:06 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# include "ft_printf/ft_printf.h"
-# include "get_next_line/get_next_line.h"
-# include "list/t_list.h"
+# include <unistd.h>
+# include <stdlib.h>
+
+unsigned int	ft_printf(const char *format, ...);
+
+char			*get_next_line(int fd);
 
 // conversion
 int		ft_atoi(const char *nptr);
@@ -24,6 +27,12 @@ int		ft_toupper(int c);
 int		ft_tolower(int c);
 
 // list
+typedef struct s_list
+{
+	void			*content;
+	struct s_list	*next;
+}	t_list;
+
 t_list	*ft_lstnew(void *content);
 void	ft_lstadd_front(t_list **lst, t_list *new);
 int		ft_lstsize(t_list *lst);
@@ -45,8 +54,10 @@ void	*ft_memmove(void *dest, const void *src, size_t n);
 
 // my_string
 char	**ft_split(char const *s, char c);
+char	**ft_strtok(char *str, const char *delim);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strjoin_all(int n, ...);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strrchr(const char *s, int c);
 size_t	ft_strlen(const char *s);

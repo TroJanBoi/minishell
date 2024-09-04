@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 11:20:33 by nteechar          #+#    #+#             */
-/*   Updated: 2024/07/27 14:00:22 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/09/04 12:54:36 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@ int	ft_isdigit(int c);
 
 int	ft_atoi(const char *nptr)
 {
-	short	sign;
+	int		sign;
 	long	num;
 
 	while (ft_isspace(*nptr))

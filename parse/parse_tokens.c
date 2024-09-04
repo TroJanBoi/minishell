@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   put_unsigned_int.c                                 :+:      :+:    :+:   */
+/*   parse_tokens.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/11 17:03:39 by nteechar          #+#    #+#             */
-/*   Updated: 2024/05/28 16:18:35 by nteechar         ###   ########.fr       */
+/*   Created: 2024/07/30 18:22:49 by nteechar          #+#    #+#             */
+/*   Updated: 2024/08/28 15:32:37 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../ft_printf.h"
+#include "parse.h"
 
-unsigned int	put_unsigned_int(unsigned int n)
+// return (pipeline), a correctly parsed expression
+t_list	*parse_tokens(t_list *tokens)
 {
-	unsigned int	length_printed;
+	t_list	*pipeline;
 
-	length_printed = 0;
-	if (n >= 10)
-		length_printed += put_unsigned_int(n / 10);
-	length_printed += put_char(n % 10 + '0');
-	return (length_printed);
+	pipeline = tokens;
+	return (pipeline);
 }
