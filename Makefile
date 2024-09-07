@@ -6,7 +6,7 @@
 #    By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/27 11:52:43 by nteechar          #+#    #+#              #
-#    Updated: 2024/09/02 19:35:31 by pesrisaw         ###   ########.fr        #
+#    Updated: 2024/09/04 16:37:29 by pesrisaw         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 SRCS =	main.c \
-		signal.c
+		signal.c \
+		execute/execute.c
 OBJS = $(SRCS:%.c=%.o)
 
 all: $(NAME)

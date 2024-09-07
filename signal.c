@@ -6,7 +6,7 @@
 /*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 10:38:43 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/08/27 10:16:35 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/09/04 16:38:13 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_sigint(int signal)
 	if (signal == SIGINT && signal_global == 0)
 	{
 		rl_on_new_line();
-		ft_putstr_fd("\n", STDOUT);
+		ft_putstr_fd("\n", STDOUT_FILENO);
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
