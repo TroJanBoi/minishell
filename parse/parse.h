@@ -36,6 +36,10 @@ typedef struct s_simple_command
 	char	**argv;
 	char	**redir_in;
 	char	**redir_out;
+	int		allin;
+	int		allout;
+	int		fd_in;
+	int		fd_out;
 }	t_simple_command;
 
 t_list	*parse_line(char *line);
