@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   constants.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/05 13:30:29 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/20 12:33:46 by nteechar         ###   ########.fr       */
+/*   Created: 2024/09/11 12:42:10 by nteechar          #+#    #+#             */
+/*   Updated: 2024/09/20 17:05:43 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "t_list.h"
+#ifndef CONSTANTS_H
+# define CONSTANTS_H
 
-// return address of node enveloping content
-// return NULL if cannot malloc new node
-// *** content can be NULL
-t_list	*ft_lstnew(void *content)
-{
-	t_list	*new_node;
+# define TRUE 1
+# define FALSE 0
 
-	new_node = malloc(sizeof(t_list));
-	if (new_node == NULL)
-		return (NULL);
-	new_node->content = content;
-	new_node->next = NULL;
-	return (new_node);
-}
+# define SUCCESS 0
+# define ERROR 1
+
+# define END 0
+
+# define SUCCESS_EXE SUCCESS
+# define CATCH_ERROR ERROR
+# define IMPROPER_CMD 2
+# define ISSUE_PATH 127
+# define FATAL_ERROR 130
+# define OUT_RANGE 255
+
+#endif

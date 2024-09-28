@@ -1,22 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_tokens.c                                     :+:      :+:    :+:   */
+/*   ft_lstnew_add_front.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/30 18:22:49 by nteechar          #+#    #+#             */
-/*   Updated: 2024/08/28 15:32:37 by nteechar         ###   ########.fr       */
+/*   Created: 2024/09/20 11:58:25 by nteechar          #+#    #+#             */
+/*   Updated: 2024/09/20 12:33:39 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parse.h"
+#include "t_list.h"
+#include <unistd.h>
 
-// return (pipeline), a correctly parsed expression
-t_list	*parse_tokens(t_list *tokens)
+t_list	*ft_lstnew(void *content);
+void	ft_lstadd_front(t_list **lst, t_list *new);
+
+// return address of created node enveloping the content
+// return NULL if cannot malloc new node
+t_list	*ft_lstnew_add_front(t_list **lst, void *content)
 {
-	t_list	*pipeline;
+	t_list	*node;
 
-	pipeline = tokens;
-	return (pipeline);
+	node = ft_lstnew(content);
+	if (node == NULL)
+		return (NULL);
+	ft_lstadd_front(lst, node);
+	return (node);
 }

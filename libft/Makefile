@@ -6,7 +6,7 @@
 #    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/05 13:18:31 by nteechar          #+#    #+#              #
-#    Updated: 2024/08/28 15:16:31 by nteechar         ###   ########.fr        #
+#    Updated: 2024/09/18 14:30:20 by nteechar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,10 +21,10 @@ CFLAGS = -Wall -Wextra -Werror
 AR = ar rcs
 RM = rm -rf
 
-OBJS_DIR = _objects
-OBJS = _objects/*
+OBJS_DIR = __objs
+OBJS = $(OBJS_DIR)/*
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re compile
 
 all: compile
 

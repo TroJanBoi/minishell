@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   colors.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/05 13:30:29 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/20 12:33:46 by nteechar         ###   ########.fr       */
+/*   Created: 2024/09/20 17:05:01 by nteechar          #+#    #+#             */
+/*   Updated: 2024/09/20 17:05:22 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "t_list.h"
+#ifndef COLORS_H
+# define COLORS_H
 
-// return address of node enveloping content
-// return NULL if cannot malloc new node
-// *** content can be NULL
-t_list	*ft_lstnew(void *content)
-{
-	t_list	*new_node;
+# define RESET "\033[0m"
+# define GREY "\033[30m"
+# define RED "\033[31m"
+# define GREEN "\033[32m"
+# define YELLOW "\033[33m"
+# define BLUE "\033[34m"
+# define PURPLE "\033[35m"
+# define CYAN "\033[36m"
 
-	new_node = malloc(sizeof(t_list));
-	if (new_node == NULL)
-		return (NULL);
-	new_node->content = content;
-	new_node->next = NULL;
-	return (new_node);
-}
+#endif

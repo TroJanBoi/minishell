@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/05 13:30:29 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/20 12:33:46 by nteechar         ###   ########.fr       */
+/*   Created: 2024/09/20 14:46:28 by nteechar          #+#    #+#             */
+/*   Updated: 2024/09/20 14:48:45 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "t_list.h"
-
-// return address of node enveloping content
-// return NULL if cannot malloc new node
-// *** content can be NULL
-t_list	*ft_lstnew(void *content)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	t_list	*new_node;
+	unsigned char	c1;
+	unsigned char	c2;
 
-	new_node = malloc(sizeof(t_list));
-	if (new_node == NULL)
-		return (NULL);
-	new_node->content = content;
-	new_node->next = NULL;
-	return (new_node);
+	while (1)
+	{
+		c1 = *s1;
+		c2 = *s2;
+		if (c1 == '\0' || c2 == '\0' || c1 != c2)
+			return (c1 - c2);
+		s1++;
+		s2++;
+	}
 }

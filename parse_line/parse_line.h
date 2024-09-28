@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute.h                                          :+:      :+:    :+:   */
+/*   parse_line.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/04 20:42:01 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/09/06 18:22:49 by pesrisaw         ###   ########.fr       */
+/*   Created: 2024/09/16 16:26:49 by nteechar          #+#    #+#             */
+/*   Updated: 2024/09/20 16:41:51 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTE_H
-# define EXECUTE_H
+#ifndef PARSE_LINE_H
+# define PARSE_LINE_H
 
-# include "../minishell.h"
-# include <fcntl.h>
+# include "../libft/libft.h"
+# include "../constants.h"
 
-typedef struct s_exe
-{
-	pid_t	pid;
-	int		fd[2];
-	int		fdtemp;
-}	t_exe;
+# include "token/token.h"
+# include "command/command.h"
+
+# include "../__debugging.h"
+
+t_list	*parse_line(char *line, int *parse_status);
 
 #endif
-

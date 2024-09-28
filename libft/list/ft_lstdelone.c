@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:54:32 by nteechar          #+#    #+#             */
-/*   Updated: 2024/07/30 18:50:27 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/09/11 14:35:59 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *))
 {
 	if (lst == NULL)
 		return ;
-	if (del != NULL)
+	if (del && lst->content)
 		del(lst->content);
 	free(lst);
 }

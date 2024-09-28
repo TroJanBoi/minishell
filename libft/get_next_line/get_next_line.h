@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:08 by nteechar          #+#    #+#             */
-/*   Updated: 2024/05/29 15:44:28 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/09/18 14:21:25 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,17 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 100
 # endif
 
-# ifndef CONSTANTS
-#  define ERROR -1
-#  define SUCCESS 0
-# endif
+# define TRUE 1
+# define FALSE 0
 
-# include <unistd.h>
-# include <stdlib.h>
+# define SUCCESS 0
+# define ERROR 1
 
-char		*get_next_line(int fd);
+# include "../libft.h"
 
-typedef struct s_gnl_list
-{
-	char				*str;
-	int					i;
-	struct s_gnl_list	*next;
-}	t_gnl_list;
-
-t_gnl_list	*gnl_ft_lstnew(void);
-void		gnl_ft_lstdelone(t_gnl_list *lst);
-void		gnl_ft_lstdel_front(t_gnl_list **lst);
-void		gnl_ft_lstclear(t_gnl_list **lst);
-void		gnl_ft_lstadd_back(t_gnl_list **lst, t_gnl_list *new);
+char	*get_next_line(int fd);
 
 #endif

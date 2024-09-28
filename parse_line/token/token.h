@@ -1,29 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/05 13:30:29 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/20 12:33:46 by nteechar         ###   ########.fr       */
+/*   Created: 2024/09/20 09:13:31 by nteechar          #+#    #+#             */
+/*   Updated: 2024/09/20 13:59:07 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "t_list.h"
+#ifndef TOKEN_H
+# define TOKEN_H
 
-// return address of node enveloping content
-// return NULL if cannot malloc new node
-// *** content can be NULL
-t_list	*ft_lstnew(void *content)
+# define WORD 10
+# define REDIR 20
+# define INFILE 21
+# define OUTFILE 22
+# define HEREDOC 23
+# define APPEND 24
+# define PIPE 30
+
+// token class
+typedef struct s_token
 {
-	t_list	*new_node;
+	int		type;
+	char	*str;
+}	t_token;
 
-	new_node = malloc(sizeof(t_list));
-	if (new_node == NULL)
-		return (NULL);
-	new_node->content = content;
-	new_node->next = NULL;
-	return (new_node);
-}
+t_token	*create_token(char *str, int type);
+void	*copy_token(void *token);
+void	free_token(void *content);
+
+#endif

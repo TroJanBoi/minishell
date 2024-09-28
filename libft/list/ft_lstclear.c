@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:56:41 by nteechar          #+#    #+#             */
-/*   Updated: 2024/07/30 18:50:33 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/09/20 12:32:57 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,5 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 		ft_lstdelone(*lst, del);
 		*lst = next_node;
 	}
-	lst = NULL;
+	*lst = NULL;
 }
