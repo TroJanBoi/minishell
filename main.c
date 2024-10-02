@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 16:50:49 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/20 17:08:37 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/10/02 21:36:10 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // void	manage_history(char *line);
 // void	execute(t_list *pipeline);
 
-int	main(int argc, char **argv)
+int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
 	t_list	*commands;
@@ -49,9 +49,9 @@ int	main(int argc, char **argv)
 			printf("minishell: syntax error\n");
 			continue ;
 		}
-		print_commands(commands);
-		ft_lstclear(&commands, free_command);
-		// execute(pipeline);
+		// print_commands(commands);
+		execute(commands, envp);
+		// ft_lstclear(&commands, free_command);
 	}
 	return (EXIT_SUCCESS);
 }

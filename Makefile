@@ -3,17 +3,18 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
+#    By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/27 11:52:43 by nteechar          #+#    #+#              #
-#    Updated: 2024/09/20 14:13:33 by nteechar         ###   ########.fr        #
+#    Updated: 2024/10/02 21:46:49 by pesrisaw         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 CC = cc
-#CFLAGS = -Wall -Wextra -Werror
+# CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g
 RM = rm -rf
 LFLAGS = -L/usr/include -lreadline -lhistory
 
@@ -21,9 +22,12 @@ LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 HEADERS = parse/parse.h \
-	__debugging.h
+	__debugging.h \
+	execute/execute.h
 
-EXECUTE_SRCS = 
+EXECUTE_SRCS = execute/init_execute.c \
+	execute/free_exe.c \
+	execute/check_file.c
 SIGNAL_SRCS = 
 HISTORY_SRCS = 
 

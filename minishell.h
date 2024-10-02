@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 19:28:14 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/09/20 17:07:30 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/09/30 15:25:53 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,13 @@ tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs
 // program's headers
 # include "parse_line/parse_line.h"
 
+// execute
+# include  "execute/execute.h"
+
 #include "__debugging.h"
 #include "colors.h"
 
 /*Signal*/
-void	setup_signal(void);
+// void	setup_signal(void);
 
 #endif
