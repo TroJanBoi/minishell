@@ -6,7 +6,7 @@
 /*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:23:43 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/10/03 00:43:28 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/10/04 16:23:01 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,19 +69,12 @@ void execute(t_list *commands, char **envp)
 	t_token		*token;
 
 	cmd_list = NULL;
+	if (check_file(commands) == FALSE)
+		return ;
     while (commands)
     {
         command = (t_command *)commands->content;
         append_exe(&cmd_list, command);
-        if (command->redirs)
-        {
-            // token = (t_token *)command->redirs->content;
-            if (check_file(command->redirs) == FALSE)
-            {
-                perror(RED"File Filed"RESET);
-                return ;
-            }
-        }
         commands = commands->next;
     }
     print_commands_exe(cmd_list); // debugging

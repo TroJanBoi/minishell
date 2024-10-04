@@ -6,35 +6,55 @@
 /*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 21:46:02 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/10/03 01:12:27 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/10/04 15:52:18 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 
-int check_file(t_list *tokens)
+int	sub_check_file(t_list *file)
 {
-    t_token *token;
+	int	status;
+	t_token		*token;
 
-    if (tokens->content == NULL)
-        return (TRUE);
-
-    while (tokens)
-    {
-        token = (t_token *)tokens->content;
-
+	status = TRUE;
+	while (file->content)
+	{
+		token = (t_token *)file->content;
 		if (token->type == WORD)
 		{
-        	// printf("Checking file: %s\n", token->str);
 			if (access(token->str, R_OK) == 0 || access(token->str, R_OK | W_OK) == 0)
-				return (TRUE);
+				status = TRUE;
 			else
-				return (FALSE);
-			tokens = tokens->next;
+			{
+				perror(token->str);
+				status = FALSE;
+				break;
+			}
+			file = file->next;
 		}
-        tokens = tokens->next;
-    }
-	printf("%sEND%s\n", PURPLE, RESET);
-    return (TRUE);
+		file = file->next;
+	}
+	return (status);
 }
 
+int check_file(t_list *tokens)
+{
+    int			status;
+	
+	t_command	*cmd;
+	t_list		*file;
+
+	status = TRUE;
+	while (tokens)
+	{
+		cmd = (t_command *)tokens->content;
+		if (cmd->redirs != NULL)
+		{
+			file = (t_list *)cmd->redirs;
+			status = sub_check_file(file);
+		}
+		tokens = tokens->next;
+	}
+    return (status);
+}
