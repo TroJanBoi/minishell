@@ -6,7 +6,7 @@
 /*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 21:46:02 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/10/04 15:52:18 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/10/11 20:06:14 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	sub_check_file(t_list *file)
 {
-	int	status;
+	int			status;
 	t_token		*token;
 
 	status = TRUE;

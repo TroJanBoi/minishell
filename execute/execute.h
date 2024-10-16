@@ -6,7 +6,7 @@
 /*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:16:44 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/10/04 14:58:26 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/10/11 18:51:34 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct s_exe
 	int				fd_in;
 	int				fd_out;
 	struct s_exe	*next;
+	pid_t			pid;
 }	t_exe;
 
 void	execute(t_list *command, char **envp);
