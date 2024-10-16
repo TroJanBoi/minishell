@@ -1,28 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_exe.c                                         :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/02 18:07:39 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/10/16 19:00:24 by pesrisaw         ###   ########.fr       */
+/*   Created: 2024/10/16 18:29:32 by pesrisaw          #+#    #+#             */
+/*   Updated: 2024/10/16 19:00:37 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 
-void	free_exe_list(t_exe *head)
+void	ft_err(char *txt)
 {
-	t_exe *temp;
-
-	while (head)
-	{
-		temp = head;
-		head = head->next;
-
-		if (temp->command)
-			free_command(temp->command);
-		free(temp);
-	}
+	perror(txt);
+	exit(EXIT_FAILURE);
 }

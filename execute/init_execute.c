@@ -6,7 +6,7 @@
 /*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:23:43 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/10/16 11:59:03 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/10/16 19:00:32 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ static t_exe	*init_execute(t_command *commands)
 	if (!cmd)
 		return (FALSE);
 	cmd->command = commands;
-    cmd->fd_in = -1;
-    cmd->fd_out = -1;
-    cmd->fd[0] = -1;
-    cmd->fd[1] = -1;
-    cmd->next = NULL;
+	cmd->fd_in = -1;
+	cmd->fd_out = -1;
+	cmd->fd[0] = -1;
+	cmd->fd[1] = -1;
+	cmd->next = NULL;
 	return (cmd);
 }
 
@@ -49,78 +49,102 @@ void			append_exe(t_exe **head, t_command *command)
 
 void print_commands_exe(t_exe *exe_list)
 {
-    while (exe_list)
-    {
-        t_command *command = exe_list->command;
-        printf("Command: ");
-        print_string_arr(command->argv, "command->argv");
-        print_tokens(command->redirs, "command->redirs");
-        exe_list = exe_list->next;
-	}
-}
-
-void	ft_childprocess(t_exe *cmd_lst, char **envp)
-{
-	printf("%s |%s| %s\n", RED, cmd_lst->command->argv[0], RESET);
-	while (cmd_lst)
+	while (exe_list)
 	{
-		if (cmd_lst->command->redirs)
-		{
-			printf("%s\n", (char *)cmd_lst->command->redirs->content);
-		}
-		cmd_lst = cmd_lst->next;
+		t_command *command = exe_list->command;
+		printf("Command: ");
+		print_string_arr(command->argv, "command->argv");
+		print_tokens(command->redirs, "command->redirs");
+		exe_list = exe_list->next;
 	}
-	printf("sucess\n");
 }
 
-void	sub_execute(t_exe *cmd_lst, char **envp)
+void    open_lastfile(t_exe *cmd_lst)
 {
-	printf("%sstart-sub_execute%s\n", YELLOW, RESET);
+	t_list *redir;
+	t_token *file;
+	
+	redir = cmd_lst->command->redirs;
+	while (redir->content)
+	{
+		file = (t_token *)redir->content;
+		if (file->type == WORD)
+		{
+			cmd_lst->fd_in = open(file->str, O_RDONLY);
+			if (cmd_lst->fd_in == -1)
+			{
+				perror(file->str);
+				return ;
+			}
+		}
+		redir = redir->next;
+	}
+	dup2(cmd_lst->fd_in, STDIN_FILENO);
+	close(cmd_lst->fd_in);
+}
+
+void    ft_childprocess(t_exe *cmd_lst, char **envp, int *prev_fd)
+{
+	if (cmd_lst->next)
+	{
+		dup2(cmd_lst->fd[1], STDOUT_FILENO);
+		close(cmd_lst->fd[1]);
+	}
+	if (*prev_fd != -1)
+	{
+		dup2(*prev_fd, STDIN_FILENO);  // Redirect input from previous pipe
+		close(*prev_fd);
+	}
+	if (cmd_lst->command->redirs->content)
+		open_lastfile(cmd_lst);
+	if (execvp(cmd_lst->command->argv[0], cmd_lst->command->argv) == -1)
+		ft_err(cmd_lst->command->argv[0]);
+}
+
+void sub_execute(t_exe *cmd_lst, char **envp)
+{
+	int prev_fd;
+
+	prev_fd = -1;
 	while (cmd_lst)
 	{
 		if (cmd_lst->command->argv)
 		{
 			if (cmd_lst->next && pipe(cmd_lst->fd) == -1)
-			{
-				perror("pipe failed");
-				exit(EXIT_FAILURE);
-			}
+				ft_err("pipe failed");
 			cmd_lst->pid = fork();
 			if (cmd_lst->pid < 0)
-			{
-				perror("fork failed");
-				exit(EXIT_FAILURE);
-			}
+				ft_err("fork failed");
 			if (cmd_lst->pid == 0)
-				ft_childprocess(cmd_lst, envp);
-			else
-				wait(&cmd_lst->pid);
+				ft_childprocess(cmd_lst, envp, &prev_fd);
+			if (cmd_lst->next)
+			{
+				close(cmd_lst->fd[1]);
+				prev_fd = cmd_lst->fd[0]; // set input from prevoius STDIN 
+			}
+			waitpid(cmd_lst->pid, NULL, 0);
 		}
 		cmd_lst = cmd_lst->next;
 	}
-	printf("%send-sub_execute%s\n", YELLOW, RESET);
 }
+
 
 void	execute(t_list *commands, char **envp)
 {
-    printf("%sStart execute%s\n", GREEN, RESET);
-    t_exe		*cmd_list;
-    t_command	*command;
-	t_token		*token;
+	printf("%sStart execute%s\n", GREEN, RESET);
+	t_exe		*cmd_list;
+	t_command	*command;
 
 	cmd_list = NULL;
 	if (check_file(commands) == FALSE)
-	{
-		printf("%s Fail checkfile %s\n", RED, RESET);
 		return ;
+	while (commands)
+	{
+		command = (t_command *)commands->content;
+		append_exe(&cmd_list, command);
+		commands = commands->next;
 	}
-    while (commands)
-    {
-        command = (t_command *)commands->content;
-        append_exe(&cmd_list, command);
-        commands = commands->next;
-	}
-    sub_execute(cmd_list, envp);
+	sub_execute(cmd_list, envp);
 	// free_exe_list(cmd_list);
-    printf("%sEnd of execute%s\n", GREEN, RESET);
+	printf("%sEnd of execute%s\n", GREEN, RESET);
 }

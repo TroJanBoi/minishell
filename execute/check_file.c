@@ -6,7 +6,7 @@
 /*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 21:46:02 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/10/11 20:06:14 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/10/16 19:00:49 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int	sub_check_file(t_list *file)
 				status = FALSE;
 				break;
 			}
-			file = file->next;
 		}
 		file = file->next;
 	}
@@ -40,8 +39,7 @@ int	sub_check_file(t_list *file)
 
 int check_file(t_list *tokens)
 {
-    int			status;
-	
+	int			status;
 	t_command	*cmd;
 	t_list		*file;
 

@@ -6,7 +6,7 @@
 /*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 19:28:14 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/09/30 15:25:53 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/10/16 16:10:13 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs
 
 # include <stdio.h>
 # include <string.h>
+# include <fcntl.h>
 
 # include <sys/types.h>
 # include <sys/wait.h>
