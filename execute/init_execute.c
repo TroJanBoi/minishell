@@ -6,7 +6,7 @@
 /*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:23:43 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/10/16 19:00:32 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/10/16 22:14:41 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void print_commands_exe(t_exe *exe_list)
 	}
 }
 
-void    open_lastfile(t_exe *cmd_lst)
+void	open_lastfile(t_exe *cmd_lst)
 {
 	t_list *redir;
 	t_token *file;
@@ -103,9 +103,11 @@ void    ft_childprocess(t_exe *cmd_lst, char **envp, int *prev_fd)
 
 void sub_execute(t_exe *cmd_lst, char **envp)
 {
-	int prev_fd;
+	int		prev_fd;
+	t_exe	*current;
 
 	prev_fd = -1;
+	current = cmd_lst;
 	while (cmd_lst)
 	{
 		if (cmd_lst->command->argv)
@@ -122,12 +124,11 @@ void sub_execute(t_exe *cmd_lst, char **envp)
 				close(cmd_lst->fd[1]);
 				prev_fd = cmd_lst->fd[0]; // set input from prevoius STDIN 
 			}
-			waitpid(cmd_lst->pid, NULL, 0);
 		}
 		cmd_lst = cmd_lst->next;
 	}
+	wait_allprocess(current);
 }
-
 
 void	execute(t_list *commands, char **envp)
 {

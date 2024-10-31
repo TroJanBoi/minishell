@@ -6,7 +6,7 @@
 #    By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/27 11:52:43 by nteechar          #+#    #+#              #
-#    Updated: 2024/10/16 18:32:42 by pesrisaw         ###   ########.fr        #
+#    Updated: 2024/10/16 22:06:56 by pesrisaw         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,8 @@ HEADERS = parse/parse.h \
 EXECUTE_SRCS = execute/init_execute.c \
 	execute/free_exe.c \
 	execute/check_file.c \
-	execute/error.c
+	execute/error.c \
+	execute/wait_allprocess.c
 SIGNAL_SRCS = 
 HISTORY_SRCS = 
 

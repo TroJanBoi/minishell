@@ -6,7 +6,7 @@
 /*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:16:44 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/10/16 19:00:41 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/10/16 22:06:12 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,5 @@ void	execute(t_list *command, char **envp);
 void	free_exe_list(t_exe *cmd_list);
 int		check_file(t_list *token);
 void	ft_err(char *txt);
+void	wait_allprocess(t_exe *cmd_lst);
 #endif
