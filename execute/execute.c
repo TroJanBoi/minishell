@@ -6,13 +6,13 @@
 /*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:23:43 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/01 15:27:32 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/01 16:59:56 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 
-void    open_lastfile(t_exe *cmd_lst)
+void	open_lastfile(t_exe *cmd_lst)
 {
 	t_list	*redir;
 	t_token	*file;
@@ -51,15 +51,29 @@ void	ft_childprocess(t_exe *cmd_lst, char **envp, int *prev_fd)
 	if (cmd_lst->command->redirs->content)
 		open_lastfile(cmd_lst);
 	if (execvp(cmd_lst->command->argv[0], cmd_lst->command->argv) == -1)
-		ft_err(cmd_lst->command->argv[0]);
+	{
+		perror("failed execvp");
+		exit(EXIT_FAILURE);
+	}
+}
+
+void	wait_allprocess(t_exe *cmd_lst)
+{
+	while (cmd_lst)
+	{
+		if (cmd_lst->pid > 0)
+			waitpid(cmd_lst->pid, NULL, 0);
+		cmd_lst = cmd_lst->next;
+	}
 }
 
 void	sub_execute(t_exe *cmd_lst, char **envp)
 {
-	int		prev_fd;
-	t_exe	*current;
+	int	prev_fd;
+	t_exe	*cmd_lst_wait;
 
 	prev_fd = -1;
+	cmd_lst_wait = cmd_lst;
 	while (cmd_lst)
 	{
 		if (cmd_lst->command->argv)
@@ -67,6 +81,7 @@ void	sub_execute(t_exe *cmd_lst, char **envp)
 			if (cmd_lst->next && pipe(cmd_lst->fd) == -1)
 				ft_err("pipe failed");
 			cmd_lst->pid = fork();
+			dprintf(2, "pid->%d\n", cmd_lst->pid);
 			if (cmd_lst->pid < 0)
 				ft_err("fork failed");
 			if (cmd_lst->pid == 0)
@@ -74,24 +89,25 @@ void	sub_execute(t_exe *cmd_lst, char **envp)
 			if (cmd_lst->next)
 			{
 				close(cmd_lst->fd[1]);
-				prev_fd = cmd_lst->fd[0]; // set input from prevoius STDIN 
+				prev_fd = cmd_lst->fd[0]; // set input from prevoius STDIN q
 			}
-			waitpid(cmd_lst->pid, NULL, 0);
 		}
 		cmd_lst = cmd_lst->next;
 	}
+	wait_allprocess(cmd_lst_wait);
 }
-
 
 // free_exe_list(cmd_list);  (after executing ??)
 void	execute(t_list *commands, char **envp)
 {
 	t_exe		*cmd_list;
 
-	printf("%sStart execute%s\n", GREEN, RESET);
+	// printf("%sStart execute%s\n", GREEN, RESET);
 	if (check_file(commands) == FALSE)
 		return ;
 	cmd_list = init_cmd_list(commands);
+	print_commands_exe(cmd_list);
 	sub_execute(cmd_list, envp);
-	printf("%sEnd of execute%s\n", GREEN, RESET);
+	free_exe_list(cmd_list);
+	// printf("%sEnd of execute%s\n", GREEN, RESET);
 }
