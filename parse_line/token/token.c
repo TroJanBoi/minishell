@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 14:39:37 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/20 16:46:10 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/10/16 16:49:09 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 // - have malloc'd duplicate of str for token->str
 // - have integer for token->type
 // return NULL if malloc error
-t_token	*create_token(char *str, int type)
+t_token	*create_token(char *str, t_token_type type)
 {
 	t_token	*token;
 

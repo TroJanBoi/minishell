@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:08 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/18 14:21:25 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/10/25 11:17:58 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@
 
 # define SUCCESS 0
 # define ERROR 1
-
-# include "../libft.h"
 
 char	*get_next_line(int fd);
 

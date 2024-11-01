@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 09:13:31 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/20 13:59:07 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/10/16 18:27:47 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,16 @@
 # define APPEND 24
 # define PIPE 30
 
+typedef int	t_token_type;
+
 // token class
 typedef struct s_token
 {
-	int		type;
-	char	*str;
+	t_token_type	type;
+	char			*str;
 }	t_token;
 
-t_token	*create_token(char *str, int type);
+t_token	*create_token(char *str, t_token_type type);
 void	*copy_token(void *token);
 void	free_token(void *content);
 

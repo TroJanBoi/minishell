@@ -6,54 +6,78 @@
 #    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/05 13:18:31 by nteechar          #+#    #+#              #
-#    Updated: 2024/09/18 14:30:20 by nteechar         ###   ########.fr        #
+#    Updated: 2024/10/25 15:30:42 by nteechar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
-RED = \033[31m
-GREEN = \033[32m
-RESET = \033[0m
-
+# commands
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-AR = ar rcs
 RM = rm -rf
+AR = ar rcs
 
-OBJS_DIR = __objs
-OBJS = $(OBJS_DIR)/*
+# files
+HEADERS = conversion/conversion.h \
+	ft_printf/ft_printf.h \
+	ft_string/ft_string.h \
+	get_next_line/get_next_line.h \
+	list/list.h list/t_list.h \
+	memory/memory.h \
+	putting/putting.h \
+	type_check/type_check.h
 
-.PHONY: all clean fclean re compile
+SRCS = conversion/ft_atoi.c conversion/ft_tolower.c \
+	conversion/ft_itoa.c conversion/ft_toupper.c \
+	\
+	ft_printf/ft_printf.c \
+	ft_printf/put_address.c ft_printf/put_char.c ft_printf/put_hex.c \
+	ft_printf/put_int.c ft_printf/put_str.c ft_printf/put_unsigned_int.c \
+	\
+	ft_string/ft_split.c ft_string/ft_strchr.c ft_string/ft_strcmp.c \
+	ft_string/ft_strdup.c ft_string/ft_striteri.c ft_string/ft_strjoin_all.c \
+	ft_string/ft_strjoin.c ft_string/ft_strlcat.c ft_string/ft_strlcpy.c \
+	ft_string/ft_strlen.c ft_string/ft_strmapi.c ft_string/ft_strncmp.c \
+	ft_string/ft_strnstr.c ft_string/ft_strtok.c ft_string/ft_strtrim.c \
+	ft_string/ft_substr.c \
+	\
+	get_next_line/get_next_line.c get_next_line/get_line_from_buffers.c \
+	\
+	list/ft_lstadd_back.c list/ft_lstadd_front.c list/ft_lstclear.c \
+	list/ft_lstdelone.c list/ft_lstiter.c list/ft_lstlast.c \
+	list/ft_lstmap.c list/ft_lstnew_add_back.c list/ft_lstnew_add_front.c \
+	list/ft_lstnew.c list/ft_lstsize.c list/ft_lstmatch.c \
+	\
+	memory/ft_bzero.c memory/ft_calloc.c memory/ft_memchr.c \
+	memory/ft_memcmp.c memory/ft_memcpy.c memory/ft_memmove.c \
+	memory/ft_memset.c \
+	\
+	putting/ft_putchar_fd.c putting/ft_putendl_fd.c \
+	putting/ft_putnbr_fd.c putting/ft_putstr_fd.c \
+	\
+	type_check/ft_isalnum.c type_check/ft_isalpha.c type_check/ft_isascii.c \
+	type_check/ft_isdigit.c type_check/ft_isinset.c type_check/ft_islower.c \
+	type_check/ft_isprint.c type_check/ft_isspace.c type_check/ft_isupper.c 
 
-all: compile
+OBJS = $(SRCS:%.c=%.o)
 
-$(NAME): $(OBJS)
-	$(AR) $@ $^
+# phony rules
+.PHONY: all clean fclean re
 
-compile:
-	@printf "$(GREEN)Compiling .o files\n$(RESET)"
-	@mkdir -p $(OBJS_DIR)
-	@$(MAKE) -C conversion OBJS_DIR=$(abspath $(OBJS_DIR))
-	@$(MAKE) -C ft_printf OBJS_DIR=$(abspath $(OBJS_DIR))
-	@$(MAKE) -C ft_string OBJS_DIR=$(abspath $(OBJS_DIR))
-	@$(MAKE) -C get_next_line OBJS_DIR=$(abspath $(OBJS_DIR))
-	@$(MAKE) -C list OBJS_DIR=$(abspath $(OBJS_DIR))
-	@$(MAKE) -C memory OBJS_DIR=$(abspath $(OBJS_DIR))
-	@$(MAKE) -C putting OBJS_DIR=$(abspath $(OBJS_DIR))
-	@$(MAKE) -C type_checking OBJS_DIR=$(abspath $(OBJS_DIR))
-	@printf "$(GREEN)\nLinking libft.a\n$(RESET)"
-	@$(MAKE) $(NAME)
-	@printf "\n"
+all: $(NAME)
 
 clean:
-	@printf "$(RED)Removing .o files\n$(RESET)"
-	$(RM) $(OBJS_DIR)/*
-	@printf "\n"
+	$(RM) $(OBJS)
 
 fclean: clean
-	@printf "$(RED)Removing libft.a\n$(RESET)"
 	$(RM) $(NAME)
-	@printf "\n"
 
 re: fclean all
+
+# rules
+$(NAME): $(OBJS) $(HEADERS)
+	$(AR) $(NAME) $(OBJS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@

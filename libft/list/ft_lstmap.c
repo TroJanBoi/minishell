@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 14:00:38 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/20 10:12:39 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/10/16 14:38:19 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static t_list	*create_new_node(t_list *lst, void *(*f)(void *),
 	new_node = ft_lstnew(new_content);
 	if (new_node == NULL)
 	{
-		if (del && new_content)
+		if (del)
 			del(new_content);
 		return (NULL);
 	}

@@ -6,10 +6,12 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:16 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/20 15:09:00 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/10/25 15:01:27 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
+#include "../libft.h"
 #include "get_next_line.h"
 
 static int	have_newline(t_list *buffers)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 21:46:02 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/10/16 19:00:49 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/10/29 17:37:26 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,14 @@ int	sub_check_file(t_list *file)
 		token = (t_token *)file->content;
 		if (token->type == WORD)
 		{
-			if (access(token->str, R_OK) == 0 || access(token->str, R_OK | W_OK) == 0)
+			if (access(token->str, R_OK) == 0 \
+				|| access(token->str, R_OK | W_OK) == 0)
 				status = TRUE;
 			else
 			{
 				perror(token->str);
 				status = FALSE;
-				break;
+				break ;
 			}
 		}
 		file = file->next;
@@ -37,7 +38,7 @@ int	sub_check_file(t_list *file)
 	return (status);
 }
 
-int check_file(t_list *tokens)
+int	check_file(t_list *tokens)
 {
 	int			status;
 	t_command	*cmd;
@@ -54,5 +55,5 @@ int check_file(t_list *tokens)
 		}
 		tokens = tokens->next;
 	}
-    return (status);
+	return (status);
 }

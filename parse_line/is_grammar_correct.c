@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 17:05:28 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/20 16:55:46 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/10/16 18:27:33 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,11 @@
 
 static int	is_redir_correct(t_list **tokens, int *have_command)
 {
-	t_token	*next_token;
-
 	if ((*tokens)->next == NULL)
 		return (FALSE);
-	next_token = (*tokens)->next->content;
-	if (next_token->type != WORD)
-		return (FALSE);
 	*tokens = (*tokens)->next;
+	if (((t_token *)(*tokens)->content)->type != WORD)
+		return (FALSE);
 	*have_command = TRUE;
 	return (TRUE);
 }

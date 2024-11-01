@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_exe.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 18:07:39 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/10/16 19:00:24 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/10/29 17:37:42 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 
 void	free_exe_list(t_exe *head)
 {
-	t_exe *temp;
+	t_exe	*temp;
 
 	while (head)
 	{
 		temp = head;
 		head = head->next;
-
 		if (temp->command)
 			free_command(temp->command);
 		free(temp);

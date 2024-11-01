@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:26:18 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/23 16:11:43 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/10/16 17:02:10 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <errno.h>
 
-t_list	*tokenize(char *line);
+t_list	*tokenize_line(char *line);
 t_list	*expand_tokens(t_list *tokens);
 int		is_grammar_correct(t_list *tokens);
 t_list	*tokens_to_commands(t_list *tokens);
@@ -22,14 +22,13 @@ t_list	*tokens_to_commands(t_list *tokens);
 static t_list	*line_to_tokens(char *line)
 {
 	t_list	*tokens;
-	t_list	*expanded_tokens = NULL;  // rm "= NULL" later
+	t_list	*expanded_tokens;
 
-	tokens = tokenize(line);
+	tokens = tokenize_line(line);
 	if (tokens == NULL)
 		return (NULL);
-	// expanded_tokens = expand_tokens(tokens);
-	// ft_lstclear(&tokens, free_token);
-	expanded_tokens = tokens;
+	expanded_tokens = expand_tokens(tokens);
+	ft_lstclear(&tokens, free_token);
 	if (expanded_tokens == NULL)
 		return (NULL);
 	return (expanded_tokens);
