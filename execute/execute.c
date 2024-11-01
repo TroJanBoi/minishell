@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:23:43 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/10/29 18:24:39 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/01 15:27:32 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 
-void	open_lastfile(t_exe *cmd_lst)
+void    open_lastfile(t_exe *cmd_lst)
 {
 	t_list	*redir;
 	t_token	*file;
@@ -56,7 +56,8 @@ void	ft_childprocess(t_exe *cmd_lst, char **envp, int *prev_fd)
 
 void	sub_execute(t_exe *cmd_lst, char **envp)
 {
-	int	prev_fd;
+	int		prev_fd;
+	t_exe	*current;
 
 	prev_fd = -1;
 	while (cmd_lst)
@@ -80,6 +81,7 @@ void	sub_execute(t_exe *cmd_lst, char **envp)
 		cmd_lst = cmd_lst->next;
 	}
 }
+
 
 // free_exe_list(cmd_list);  (after executing ??)
 void	execute(t_list *commands, char **envp)

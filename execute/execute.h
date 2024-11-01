@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:16:44 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/10/29 18:23:39 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/01 15:27:28 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,5 @@ t_exe	*init_cmd_list(t_list *commands);
 void	free_exe_list(t_exe *cmd_list);
 int		check_file(t_list *token);
 void	ft_err(char *txt);
-
+void	wait_allprocess(t_exe *cmd_lst);
 #endif

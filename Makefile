@@ -6,7 +6,11 @@
 #    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/27 11:52:43 by nteechar          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2024/10/29 18:13:43 by nteechar         ###   ########.fr        #
+=======
+#    Updated: 2024/10/16 18:32:42 by pesrisaw         ###   ########.fr        #
+>>>>>>> parent of 3c88b8d (update infile)
 #                                                                              #
 # **************************************************************************** #
 
