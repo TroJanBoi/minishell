@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+         #
+#    By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/27 11:52:43 by nteechar          #+#    #+#              #
-#    Updated: 2024/11/01 15:36:47 by pesrisaw         ###   ########.fr        #
+#    Updated: 2024/11/03 14:41:03 by pesrisaw         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 
 # commands
 CC = cc
-CFLAGS = #-Wall -Wextra -Werror
+CFLAGS = -g #-Wall -Wextra -Werror
 RM = rm -rf
 
 # files
@@ -73,8 +73,8 @@ BUILTIN_SRCS = builtin/builtin_cd.c \
 	builtin/builtin_unset.c
 
 # signal directory
-FT_SIGNAL_HEADERS = ft_signal/ft_signal.h
-FT_SIGNAL_SRCS = ft_signal/ft_signal.c
+# FT_SIGNAL_HEADERS = ft_signal/ft_signal.h
+# FT_SIGNAL_SRCS = ft_signal/ft_signal.c
 
 # env_var directory
 ENV_VAR_HEADERS = env_var/env_var.h

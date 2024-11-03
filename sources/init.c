@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 18:43:04 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/25 18:02:08 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/03 14:41:15 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static t_list	*envp_to_linked_list(char **envp)
 
 int	init(t_shell_data *data, char **envp)
 {
-	setup_signal();
+	// setup_signal();
 	data->is_running = TRUE;
 	data->exit_status = EXIT_SUCCESS;
 	data->env_vars = envp_to_linked_list(envp);
