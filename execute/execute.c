@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:23:43 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/01 16:59:56 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/03 18:01:34 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
+int g_exit_status = 0;
 
 void	open_lastfile(t_exe *cmd_lst)
 {
@@ -21,13 +22,18 @@ void	open_lastfile(t_exe *cmd_lst)
 	while (redir->content)
 	{
 		file = (t_token *)redir->content;
-		if (file->type == WORD)
+		if (file->type == 21)
 		{
-			cmd_lst->fd_in = open(file->str, O_RDONLY);
-			if (cmd_lst->fd_in == -1)
+			redir = redir->next;
+			file = (t_token *)redir->content;
+			if (file->type == WORD)
 			{
-				perror(file->str);
-				return ;
+				cmd_lst->fd_in = open(file->str, O_RDONLY);
+				if (cmd_lst->fd_in == -1)
+				{
+					perror(file->str);
+					return ;
+				}
 			}
 		}
 		redir = redir->next;
@@ -42,18 +48,19 @@ void	ft_childprocess(t_exe *cmd_lst, char **envp, int *prev_fd)
 	{
 		dup2(cmd_lst->fd[1], STDOUT_FILENO);
 		close(cmd_lst->fd[1]);
+		close(cmd_lst->fd[0]);
 	}
 	if (*prev_fd != -1)
 	{
-		dup2(*prev_fd, STDIN_FILENO); // Redirect input from previous pipe
+		dup2(*prev_fd, STDIN_FILENO);
 		close(*prev_fd);
 	}
 	if (cmd_lst->command->redirs->content)
 		open_lastfile(cmd_lst);
 	if (execvp(cmd_lst->command->argv[0], cmd_lst->command->argv) == -1)
 	{
-		perror("failed execvp");
-		exit(EXIT_FAILURE);
+		perror(cmd_lst->command->argv[0]);
+		exit(127);
 	}
 }
 
@@ -69,7 +76,7 @@ void	wait_allprocess(t_exe *cmd_lst)
 
 void	sub_execute(t_exe *cmd_lst, char **envp)
 {
-	int	prev_fd;
+	int		prev_fd;
 	t_exe	*cmd_lst_wait;
 
 	prev_fd = -1;
@@ -84,13 +91,19 @@ void	sub_execute(t_exe *cmd_lst, char **envp)
 			dprintf(2, "pid->%d\n", cmd_lst->pid);
 			if (cmd_lst->pid < 0)
 				ft_err("fork failed");
+			// child process
 			if (cmd_lst->pid == 0)
 				ft_childprocess(cmd_lst, envp, &prev_fd);
-			if (cmd_lst->next)
+			// parent process
+			if (cmd_lst->next) // ถ้ามีตัว command ตัวต่อไป
 			{
-				close(cmd_lst->fd[1]);
-				prev_fd = cmd_lst->fd[0]; // set input from prevoius STDIN q
+				close(cmd_lst->fd[1]); // ปิด OUTPUT 
+				if (prev_fd != -1) // 
+					close(prev_fd);
+				prev_fd = cmd_lst->fd[0]; 
 			}
+			else if (prev_fd != -1) // เงื่อนไขนี้สำหรับ command สุดท้าย
+				close(prev_fd);
 		}
 		cmd_lst = cmd_lst->next;
 	}

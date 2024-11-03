@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   __debugging.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 17:36:11 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/01 16:36:40 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/03 17:44:00 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ void	print_tokens(t_list *tokens, char *var_name)
 		token = tokens->content;
 		if (token == NULL)
 		{
-			printf("(NULL)---");
+			printf(RED"(NULL)---"RESET);
 			break ;
 		}
-		printf("(token(%i, %s))---", token->type, token->str);
+		printf(BLUE"(token(%i, %s))---"RESET, token->type, token->str);
 		tokens = tokens->next;
 	}
 	printf("\n");
@@ -41,14 +41,14 @@ void	print_tokens(t_list *tokens, char *var_name)
 
 void	print_string_arr(char **arr, char *var_name)
 {
-	printf("%s = [ ", var_name);
+	printf(CYAN"%s = [ ", var_name);
 	while (*arr)
 	{
 		printf("%s | ", *arr);
 		arr++;
 	}
 	printf("NULL ]");
-	printf("\n");
+	printf("\n"RESET);
 }
 
 void	print_string_list(t_list *strings, char *var_name)

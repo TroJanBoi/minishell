@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_cmd_list.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:11:30 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/01 17:02:04 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/03 14:52:43 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ static t_exe	*init_execute(t_command *commands)
 	if (!cmd)
 		return (NULL);
 	cmd->command = commands;
-	// cmd->fd_in = -1;
-	// cmd->fd_out = -1;
-	// cmd->fd[0] = -1;
-	// cmd->fd[1] = -1;
+	cmd->fd_in = -1;
+	cmd->fd_out = -1;
+	cmd->fd[0] = -1;
+	cmd->fd[1] = -1;
 	cmd->next = NULL;
 	return (cmd);
 }
