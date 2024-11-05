@@ -6,7 +6,7 @@
 /*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:16:44 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/03 17:18:55 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/05 23:19:32 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 
 # include "t_exe.h"
 
-extern int g_exit_status;
 void	execute(t_list *command, char **envp);
 
 t_exe	*init_cmd_list(t_list *commands);

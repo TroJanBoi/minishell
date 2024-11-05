@@ -6,12 +6,11 @@
 /*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:23:43 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/03 18:01:34 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/05 23:17:16 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
-int g_exit_status = 0;
 
 void	open_lastfile(t_exe *cmd_lst)
 {
@@ -42,6 +41,51 @@ void	open_lastfile(t_exe *cmd_lst)
 	close(cmd_lst->fd_in);
 }
 
+void	redirection_output(t_exe *cmd_lst)
+{
+	t_list	*redir;
+	t_token	*file;
+
+	redir = cmd_lst->command->redirs;
+	while (redir->content)
+	{
+		file = (t_token *)redir->content;
+		if (file->type == 22)
+		{
+			redir = redir->next;
+			file = (t_token *)redir->content;
+			if (file->type == WORD)
+			{
+				cmd_lst->fd_out = open(file->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				if (cmd_lst->fd_out == -1)
+				{
+					perror("failed file descriptor");
+					exit(EXIT_FAILURE);
+				}
+				dup2(cmd_lst->fd_out, STDOUT_FILENO);
+				close(cmd_lst->fd_out);
+			}
+		}
+		else if (file->type == 23)
+		{
+			redir = redir->next;
+			file = (t_token *)redir->content;
+			if (file->type == WORD)
+			{
+				cmd_lst->fd_out = open(file->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
+				if (cmd_lst->fd_out == -1)
+				{
+					perror("failed file descriptor");
+					exit(EXIT_FAILURE);
+				}
+				dup2(cmd_lst->fd_out, STDOUT_FILENO);
+				close(cmd_lst->fd_out);
+			}
+		}
+		redir = redir->next;
+	}
+}
+
 void	ft_childprocess(t_exe *cmd_lst, char **envp, int *prev_fd)
 {
 	if (cmd_lst->next)
@@ -56,11 +100,14 @@ void	ft_childprocess(t_exe *cmd_lst, char **envp, int *prev_fd)
 		close(*prev_fd);
 	}
 	if (cmd_lst->command->redirs->content)
+	{
 		open_lastfile(cmd_lst);
+		redirection_output(cmd_lst);
+	}
 	if (execvp(cmd_lst->command->argv[0], cmd_lst->command->argv) == -1)
 	{
 		perror(cmd_lst->command->argv[0]);
-		exit(127);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -97,10 +144,10 @@ void	sub_execute(t_exe *cmd_lst, char **envp)
 			// parent process
 			if (cmd_lst->next) // ถ้ามีตัว command ตัวต่อไป
 			{
-				close(cmd_lst->fd[1]); // ปิด OUTPUT 
-				if (prev_fd != -1) // 
+				close(cmd_lst->fd[1]); // ปิด pipe out
+				if (prev_fd != -1)
 					close(prev_fd);
-				prev_fd = cmd_lst->fd[0]; 
+				prev_fd = cmd_lst->fd[0]; // pipe in ก้อนแรก ไปเก็บใน prev_fd  
 			}
 			else if (prev_fd != -1) // เงื่อนไขนี้สำหรับ command สุดท้าย
 				close(prev_fd);
