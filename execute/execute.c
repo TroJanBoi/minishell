@@ -6,7 +6,7 @@
 /*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:23:43 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/05 23:17:16 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/06 21:11:16 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,37 @@ void	open_lastfile(t_exe *cmd_lst)
 	close(cmd_lst->fd_in);
 }
 
-void	redirection_output(t_exe *cmd_lst)
+void	redir_output(t_token *file, t_exe *cmd_lst)
+{
+	if (file->type == WORD)
+	{
+		cmd_lst->fd_out = open(file->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (cmd_lst->fd_out == -1)
+		{
+			perror("failed file descriptor");
+			exit(EXIT_FAILURE);
+		}
+		dup2(cmd_lst->fd_out, STDOUT_FILENO);
+		close(cmd_lst->fd_out);
+	}
+}
+
+void	redir_append(t_token *file, t_exe *cmd_lst)
+{
+	if (file->type == WORD)
+	{
+		cmd_lst->fd_out = open(file->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (cmd_lst->fd_out == -1)
+		{
+			perror("failed file descriptor");
+			exit(EXIT_FAILURE);
+		}
+		dup2(cmd_lst->fd_out, STDOUT_FILENO);
+		close(cmd_lst->fd_out);
+	}
+}
+
+void	handle_redirection_output(t_exe *cmd_lst)
 {
 	t_list	*redir;
 	t_token	*file;
@@ -52,35 +82,17 @@ void	redirection_output(t_exe *cmd_lst)
 		file = (t_token *)redir->content;
 		if (file->type == 22)
 		{
+			dprintf(2, "%s>>>> Output Mode <<<<%s\n", YELLOW, RESET);
 			redir = redir->next;
 			file = (t_token *)redir->content;
-			if (file->type == WORD)
-			{
-				cmd_lst->fd_out = open(file->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-				if (cmd_lst->fd_out == -1)
-				{
-					perror("failed file descriptor");
-					exit(EXIT_FAILURE);
-				}
-				dup2(cmd_lst->fd_out, STDOUT_FILENO);
-				close(cmd_lst->fd_out);
-			}
+			redir_output(file, cmd_lst);
 		}
-		else if (file->type == 23)
+		else if (file->type == 24)
 		{
+			dprintf(2, "%s>>>> Append Mode <<<<%s\n", YELLOW, RESET);
 			redir = redir->next;
 			file = (t_token *)redir->content;
-			if (file->type == WORD)
-			{
-				cmd_lst->fd_out = open(file->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
-				if (cmd_lst->fd_out == -1)
-				{
-					perror("failed file descriptor");
-					exit(EXIT_FAILURE);
-				}
-				dup2(cmd_lst->fd_out, STDOUT_FILENO);
-				close(cmd_lst->fd_out);
-			}
+			redir_append(file, cmd_lst);
 		}
 		redir = redir->next;
 	}
@@ -102,7 +114,7 @@ void	ft_childprocess(t_exe *cmd_lst, char **envp, int *prev_fd)
 	if (cmd_lst->command->redirs->content)
 	{
 		open_lastfile(cmd_lst);
-		redirection_output(cmd_lst);
+		handle_redirection_output(cmd_lst);
 	}
 	if (execvp(cmd_lst->command->argv[0], cmd_lst->command->argv) == -1)
 	{
