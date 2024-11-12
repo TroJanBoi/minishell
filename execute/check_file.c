@@ -3,64 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   check_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 21:46:02 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/03 14:55:09 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/12 12:30:43 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 
-int	sub_check_file(t_list *file)
+// done, DEPENDENCY: edit parsing module to output combined redir tokens
+
+int	sub_check_file(t_list *redirs)
 {
-	int			status;
 	t_token		*token;
 
-	status = TRUE;
-	while (file->content)
+	while (redirs->content)
 	{
-		token = (t_token *)file->content;
-		if (token->type == 21)
+		token = redirs->content;
+		if (token->type == INFILE)
 		{
-			dprintf(2, GREEN"success type open file\n"RESET);
-			file = file->next;
-			token = (t_token *)file->content;
+			// dprintf(2, GREEN"success type open file\n"RESET);
+			redirs = redirs->next;
+			token = redirs->content;
 			if (token->type == WORD)
 			{
 				if (access(token->str, R_OK) == 0 \
 					|| access(token->str, R_OK | W_OK) == 0)
-					status = TRUE;
+					return (SUCCESS);
 				else
 				{
 					perror(token->str);
-					status = FALSE;
-					break ;
+					return (ERROR);
 				}
 			}
 		}
-		file = file->next;
+		redirs = redirs->next;
 	}
-	return (status);
+	return (SUCCESS);
 }
 
-int	check_file(t_list *tokens)
+int	check_file(t_list *command_list)
 {
 	int			status;
 	t_command	*cmd;
-	t_list		*file;
 
-	status = TRUE;
-	while (tokens)
+	status = SUCCESS;
+	while (command_list)
 	{
-		cmd = (t_command *)tokens->content;
-		if (cmd->redirs != NULL)
-		{
-			file = (t_list *)cmd->redirs;
-			status = sub_check_file(file);
-		}
-		tokens = tokens->next;
+		cmd = command_list->content;
+		if (cmd->redirs)
+			status = sub_check_file(cmd->redirs);
+		command_list = command_list->next;
 	}
-	dprintf(2, YELLOW"status : %d\n"RESET, status);
+	if (status) dprintf(2, YELLOW"status : SUCCESS\n"RESET);
+	else dprintf(2, YELLOW"status : ERROR\n"RESET);
 	return (status);
 }

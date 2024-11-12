@@ -6,11 +6,11 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:23:40 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/16 18:42:59 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:43:41 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parse_line.h"
+#include "../../libft/libft.h"
 
 static char	*get_duplicate_substring(char *word)
 {

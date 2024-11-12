@@ -6,11 +6,12 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 13:54:02 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/16 16:50:14 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:33:51 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parse_line.h"
+#include "../../libft/libft.h"
+#include "../token/token.h"
 
 // Subjected to change, depended on Boat's preferences
 

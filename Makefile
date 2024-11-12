@@ -3,108 +3,72 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+         #
+#    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/27 11:52:43 by nteechar          #+#    #+#              #
-#    Updated: 2024/11/03 14:41:03 by pesrisaw         ###   ########.fr        #
+#    Updated: 2024/11/12 14:53:24 by nteechar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
+# styles
+BOLD = \033[1m
+RED = \033[31m
+GREEN = \033[32m
+RESET = \033[0m
+
 # commands
+MAKEFLAGS += --no-print-directory
+
 CC = cc
-CFLAGS = -g #-Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -rf
 
 # files
-LIBFT = libft/libft.a
-LFLAGS = -L/usr/include -lreadline -lhistory
-
-HEADERS = $(INCLUDES) $(PARSE_LINE_HEADERS) $(BUILTIN_HEADERS) \
-	$(FT_SIGNAL_HEADERS) $(ENV_VAR_HEADERS) $(DEBUGGING_HEADERS) $(EXECUTE_HEADERS)
-SRCS = $(SOURCES) $(PARSE_LINE_SRCS) $(BUILTIN_SRCS) \
-	$(FT_SIGNAL_SRCS) $(ENV_VAR_SRCS) $(DEBUGGING_SRCS) $(EXECUTE_SRCS)
+SRCS = main.c read_line.c
 OBJS = $(SRCS:%.c=%.o)
 
-# debugging directory
-DEBUGGING_HEADERS = __debugging/__debugging.h __debugging/colors.h
-DEBUGGING_SRCS = __debugging/__debugging.c
+MODULE_DIRS = parse_line builtin execute setup __debugging
+MODULES = $(foreach dir, $(MODULE_DIRS),$(dir)/$(dir).a)
 
-# high_level directory
-INCLUDES = includes/minishell.h includes/t_shell_data.h \
-	includes/constants.h includes/external_func.h
-SOURCES = sources/main.c sources/evaluate_line.c \
-	sources/ft_readline.c sources/init.c
+LIBFT_DIR = libft
+LIBFT = $(LIBFT_DIR)/libft.a
 
-# parse_line directory
-PARSE_LINE_HEADERS = parse_line/token/token.h \
-	parse_line/command/command.h \
-	parse_line/parse_line.h
-PARSE_LINE_SRCS = parse_line/command/command.c \
-	\
-	parse_line/expand_tokens/concatenate_word_subtokens.c \
-	parse_line/expand_tokens/expand_tokens.c \
-	parse_line/expand_tokens/expand_word_subtokens.c \
-	parse_line/expand_tokens/expand_word_token.c \
-	parse_line/expand_tokens/tokenize_word.c \
-	\
-	parse_line/token/token.c \
-	\
-	parse_line/tokenize_line/get_token_str.c \
-	parse_line/tokenize_line/get_token_type.c \
-	parse_line/tokenize_line/get_token.c \
-	parse_line/tokenize_line/tokenize_line.c \
-	\
-	parse_line/tokens_to_commands/handle_tokens.c \
-	parse_line/tokens_to_commands/tokens_to_commands.c \
-	parse_line/tokens_to_commands/transform_tokens.c \
-	\
-	parse_line/is_grammar_correct.c parse_line/parse_line.c
-
-# builtin directory
-BUILTIN_HEADERS = builtin/builtin.h
-BUILTIN_SRCS = builtin/builtin_cd.c \
-	builtin/builtin_echo.c \
-	builtin/builtin_env.c \
-	builtin/builtin_exit.c \
-	builtin/builtin_export.c \
-	builtin/builtin_pwd.c \
-	builtin/builtin_unset.c
-
-# signal directory
-# FT_SIGNAL_HEADERS = ft_signal/ft_signal.h
-# FT_SIGNAL_SRCS = ft_signal/ft_signal.c
-
-# env_var directory
-ENV_VAR_HEADERS = env_var/env_var.h
-ENV_VAR_SRCS = env_var/env_var.c
-
-# execute dir
-EXECUTE_HEADERS = execute/execute.h execute/t_exe.h
-EXECUTE_SRCS = execute/check_file.c execute/execute.c execute/free_exe.c \
-	execute/ft_err.c execute/init_cmd_list.c  
+LFLAGS = -L/usr/include -lreadline -lhistory
 
 # phony rules
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re $(LIBFT_DIR) $(MODULE_DIRS)
 
 all: $(NAME)
 
 clean:
-	$(MAKE) clean -C libft
+	@$(MAKE) clean -C $(LIBFT_DIR)
+	@for dir in $(MODULE_DIRS); do \
+		echo "$(RED)delete $$dir's .o files$(RESET)"; \
+		$(MAKE) clean -C $$dir; \
+	done
 	$(RM) $(OBJS)
 
-fclean: clean
-	$(RM) $(LIBFT) $(NAME)
+fclean:
+	@$(MAKE) fclean -C $(LIBFT_DIR)
+	@for dir in $(MODULE_DIRS); do \
+		$(MAKE) fclean -C $$dir; \
+	done
+	$(RM) $(NAME)
 
 re: fclean all
 
+$(LIBFT_DIR) $(MODULE_DIRS):
+	@echo "$(BOLD)$(GREEN)build $@$(RESET)"
+	@$(MAKE) -C $@
+
 # rules
-$(NAME): $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(LFLAGS) -o $@
+$(LIBFT): $(LIBFT_DIR)
+$(MODULES): $(MODULE_DIRS)
 
-$(LIBFT):
-	$(MAKE) -C libft
+$(NAME): $(LIBFT) $(MODULES) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(MODULES) $(LIBFT) $(LFLAGS) -o $(NAME)
 
-%.o: %.c $(HEADERS)
+%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

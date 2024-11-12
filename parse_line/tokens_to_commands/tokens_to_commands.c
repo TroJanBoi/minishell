@@ -6,11 +6,13 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 17:07:38 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/25 17:32:40 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/12 15:07:45 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parse_line.h"
+#include "../../libft/libft.h"
+#include "../token/token.h"
+#include "../command/command.h"
 
 int		handle_tokens(t_list **tokens, t_list **commands, t_list **temp_argv,
 			t_list **temp_redirs);
@@ -18,7 +20,7 @@ char	**tokens_to_argv(t_list *temp_argv);
 t_list	*tokens_to_redirs(t_list *temp_redirs);
 
 // part of add_command function
-static t_command	*create_command(t_list **temp_argv, t_list **temp_redirs)
+t_command	*create_command(t_list **temp_argv, t_list **temp_redirs)
 {
 	t_command	*command;
 

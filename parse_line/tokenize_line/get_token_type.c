@@ -6,11 +6,12 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:47:21 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/16 16:48:29 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:30:08 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parse_line.h"
+#include "../../libft/libft.h"
+#include "../token/token.h"
 
 t_token_type	get_token_type(char *line)
 {

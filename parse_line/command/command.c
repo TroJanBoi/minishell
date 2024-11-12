@@ -6,11 +6,22 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 14:39:51 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/20 13:49:16 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/12 15:09:55 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parse_line.h"
+#include "../../libft/libft.h"
+#include "../token/token.h"
+#include "command.h"
+
+// t_command	*create_command(char **argv, t_token *redirs)
+// {
+// 	t_command	*command;
+
+// 	(void) argv; (void) redirs;
+// 	command = NULL;
+// 	return (command);
+// }
 
 void	free_command(void *command)
 {

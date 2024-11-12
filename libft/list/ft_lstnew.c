@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:30:29 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/20 12:33:46 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/07 15:37:33 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@ t_list	*ft_lstnew(void *content)
 		return (NULL);
 	new_node->content = content;
 	new_node->next = NULL;
+	new_node->prev = NULL;
 	return (new_node);
 }

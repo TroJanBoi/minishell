@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:46:34 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/18 15:01:54 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/07 15:49:39 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,8 @@ int	ft_lstsize(t_list *lst)
 {
 	int	size;
 
-	if (lst == NULL)
-		return (0);
 	size = 0;
-	while (lst != NULL)
+	while (lst)
 	{
 		size++;
 		lst = lst->next;

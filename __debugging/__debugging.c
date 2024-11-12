@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   __debugging.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 17:36:11 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/03 17:44:00 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:18:29 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "../parse_line/parse_line.h"
-#include "colors.h"
-#include "../execute/t_exe.h"
+#include "__debugging.h"
 
 void	print_tokens(t_list *tokens, char *var_name)
 {
@@ -30,10 +27,10 @@ void	print_tokens(t_list *tokens, char *var_name)
 		token = tokens->content;
 		if (token == NULL)
 		{
-			printf(RED"(NULL)---"RESET);
+			printf("(NULL)---");
 			break ;
 		}
-		printf(BLUE"(token(%i, %s))---"RESET, token->type, token->str);
+		printf("(token(%i, %s))---", token->type, token->str);
 		tokens = tokens->next;
 	}
 	printf("\n");
@@ -41,14 +38,14 @@ void	print_tokens(t_list *tokens, char *var_name)
 
 void	print_string_arr(char **arr, char *var_name)
 {
-	printf(CYAN"%s = [ ", var_name);
+	printf("%s = [ ", var_name);
 	while (*arr)
 	{
 		printf("%s | ", *arr);
 		arr++;
 	}
 	printf("NULL ]");
-	printf("\n"RESET);
+	printf("\n");
 }
 
 void	print_string_list(t_list *strings, char *var_name)
@@ -85,16 +82,16 @@ void	print_commands(t_list *commands)
 	printf("\n");
 }
 
-void	print_commands_exe(t_exe *exe_list)
+void	print_execute_commands(t_list *exe_list)
 {
-	t_command	*command;
+	t_execute_command	*exe_cmd;
 
 	while (exe_list)
 	{
-		command = exe_list->command;
+		exe_cmd = exe_list->content;
 		printf("Command: ");
-		print_string_arr(command->argv, "command->argv");
-		print_tokens(command->redirs, "command->redirs");
+		print_string_arr(exe_cmd->command->argv, "command->argv");
+		print_tokens(exe_cmd->command->redirs, "command->redirs");
 		exe_list = exe_list->next;
 	}
 }

@@ -6,11 +6,12 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 16:39:36 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/16 18:06:11 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:43:10 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parse_line.h"
+#include "../../libft/libft.h"
+#include "../token/token.h"
 
 static char	*get_word(char *line)
 {

@@ -6,11 +6,12 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 14:39:37 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/16 16:49:09 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:43:19 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parse_line.h"
+#include "../../libft/libft.h"
+#include "token.h"
 
 // create malloc'd token
 // - have malloc'd duplicate of str for token->str

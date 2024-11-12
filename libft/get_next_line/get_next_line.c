@@ -6,105 +6,115 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 17:11:16 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/25 15:01:27 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/07 15:22:45 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include <stdlib.h>
 #include "../libft.h"
 #include "get_next_line.h"
 
-static int	have_newline(t_list *buffers)
-{
-	char	*buffer;
+int		get_more_memory(char **queue, size_t *capacity);
+void	cleanup(char **queue, size_t *capacity);
 
-	while (buffers)
+// return -1 if queue cannot be malloc'd
+static int	append(char **queue, size_t *capacity,
+	char buffer[BUFFER_SIZE], size_t chars_read)
+{
+	size_t	initial_length;
+
+	if (*queue == NULL)
 	{
-		buffer = buffers->content;
-		if (ft_strchr(buffer, '\n'))
-			return (TRUE);
-		buffers = buffers->next;
+		*capacity = BUFFER_SIZE;
+		*queue = malloc(*capacity * sizeof(char));
+		if (*queue == NULL)
+			return (-1);
+		(*queue)[0] = '\0';
 	}
-	return (FALSE);
+	initial_length = ft_strlen(*queue);
+	while (initial_length + chars_read + 1 > *capacity)
+	{
+		if (get_more_memory(queue, capacity) != 0)
+			return (-1);
+	}
+	ft_memcpy(*queue + initial_length, buffer, chars_read);
+	(*queue)[initial_length + chars_read] = '\0';
+	return (0);
 }
 
-static int	read_file(int fd, t_list **buffers)
+// return last read's chars_read, -1 if error
+static int	read_file(int fd, char **queue, size_t *capacity)
 {
 	char	*buffer;
 	ssize_t	chars_read;
 
+	buffer = malloc(BUFFER_SIZE * sizeof(char));
+	if (buffer == NULL)
+		return (-1);
 	while (1)
 	{
-		buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
-		if (buffer == NULL)
-			return (1);
-		chars_read = read(fd, buffer, BUFFER_SIZE);
+		chars_read = read(fd, buffer, BUFFER_SIZE - 1);
 		if (chars_read == -1 || chars_read == 0)
-		{
-			free(buffer);
-			return (chars_read);
-		}
+			break ;
 		buffer[chars_read] = '\0';
-		if (ft_lstnew_add_back(buffers, buffer) == NULL)
+		if (append(queue, capacity, buffer, chars_read) != 0)
 		{
-			free(buffer);
-			return (ERROR);
-		}
-		if (ft_strchr(buffer, '\n'))
-			return (SUCCESS);
-	}
-}
-
-static int	malloc_line(char **line, t_list *buffers)
-{
-	size_t	length;
-	char	*buffer;
-
-	length = 0;
-	while (buffers)
-	{
-		buffer = buffers->content;
-		if (ft_strchr(buffer, '\n'))
-		{
-			length += ft_strchr(buffer, '\n') - buffer + 1;
+			chars_read = -1;
 			break ;
 		}
-		else
-			length += ft_strlen(buffer);
-		buffers = buffers->next;
+		if (ft_strchr(buffer, '\n'))
+			break ;
 	}
-	*line = malloc((length + 1) * sizeof(char));
-	if (*line == NULL)
-		return (ERROR);
-	*line[0] = '\0';
-	return (SUCCESS);
+	free(buffer);
+	return (chars_read);
 }
 
-int	get_line_from_buffers(char **line, t_list **buffers);
+static char	*get_line(char **queue, size_t *capacity)
+{
+	char	*line;
+	size_t	line_length;
+	size_t	queue_new_length;
+
+	line_length = 0;
+	while ((*queue)[line_length] != '\0' && (*queue)[line_length] != '\n')
+		line_length++;
+	if ((*queue)[line_length] == '\n')
+		line_length++;
+	line = malloc((line_length + 1) * sizeof(char));
+	if (line == NULL)
+		return (NULL);
+	ft_memcpy(line, *queue, line_length);
+	line[line_length] = '\0';
+	queue_new_length = ft_strlen(*queue + line_length);
+	ft_memcpy(*queue, *queue + line_length, queue_new_length);
+	(*queue)[queue_new_length] = '\0';
+	if ((*queue)[0] == '\0')
+		cleanup(queue, capacity);
+	return (line);
+}
 
 char	*get_next_line(int fd)
 {
-	static t_list	*buffers = NULL;
+	static char		*queue = NULL;
+	static size_t	capacity = 0;
+	ssize_t			chars_read;
 	char			*line;
 
-	if (buffers == NULL || !have_newline(buffers))
+	if (queue == NULL || ft_strchr(queue, '\n') == NULL)
+		chars_read = read_file(fd, &queue, &capacity);
+	else
+		chars_read = 0;
+	if ((chars_read == 0 && (queue == NULL || queue[0] == '\0'))
+		|| chars_read == -1)
 	{
-		if (read_file(fd, &buffers) != SUCCESS)
-		{
-			ft_lstclear(&buffers, free);
-			return (NULL);
-		}
-		if (buffers == NULL)
-			return (NULL);
-	}
-	if (malloc_line(&line, buffers) != SUCCESS)
-	{
-		ft_lstclear(&buffers, free);
+		cleanup(&queue, &capacity);
 		return (NULL);
 	}
-	if (get_line_from_buffers(&line, &buffers) != SUCCESS)
+	line = get_line(&queue, &capacity);
+	if (line == NULL)
 	{
-		ft_lstclear(&buffers, free);
+		cleanup(&queue, &capacity);
 		return (NULL);
 	}
 	return (line);

@@ -6,11 +6,12 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 17:05:28 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/16 18:27:33 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:34:09 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parse_line.h"
+#include "../libft/libft.h"
+#include "token/token.h"
 
 static int	is_redir_correct(t_list **tokens, int *have_command)
 {

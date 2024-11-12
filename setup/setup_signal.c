@@ -1,16 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_signal.c                                        :+:      :+:    :+:   */
+/*   setup_signal.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 10:38:43 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/10/29 17:35:57 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/12 15:11:52 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// TODO: try to make red underlines gone
 
 #include <unistd.h>
 #include <signal.h>
@@ -29,7 +27,6 @@ void	ft_sigint(int signal)
 		rl_on_new_line();
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		rl_replace_line("", 0);
-		rl_redisplay();
 	}
 	return ;
 }

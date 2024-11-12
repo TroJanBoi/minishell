@@ -6,11 +6,45 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 16:21:06 by nteechar          #+#    #+#             */
-/*   Updated: 2024/05/26 14:41:56 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/11 16:24:04 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+
+size_t			ft_strlcpy(char *dst, const char *src, size_t size);
+
+static size_t	count_words(char const *s, char c);
+static char		*get_word(char const *s, char c);
+static void		fill_arr(char **arr, size_t words, char const *s, char c);
+
+// - free n items in arr
+// - is located in ft_split.c
+void	ft_free_str_arr(char **arr, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	char	**arr;
+	size_t	number_of_words;
+
+	number_of_words = count_words(s, c);
+	arr = malloc(sizeof(char *) * (number_of_words + 1));
+	if (arr == NULL)
+		return (NULL);
+	fill_arr(arr, number_of_words, s, c);
+	return (arr);
+}
 
 // count words to malloc char pointers
 static size_t	count_words(char const *s, char c)
@@ -31,44 +65,19 @@ static size_t	count_words(char const *s, char c)
 	return (words);
 }
 
-// free everything up to i - 1 (call when there is malloc error)
-static void	clean_up(char **arr, size_t i)
-{
-	size_t	j;
-
-	j = 0;
-	while (j < i)
-	{
-		free(arr[j]);
-		j++;
-	}
-	free(arr);
-}
-
 // get the word up to (not including) c
 static char	*get_word(char const *s, char c)
 {
 	size_t	length;
-	size_t	i;
 	char	*word;
 
 	length = 0;
-	while (*s != c && *s != '\0')
-	{
+	while (s[length] && s[length] != c)
 		length++;
-		s++;
-	}
-	s -= length;
 	word = malloc(sizeof(char) * (length + 1));
 	if (word == NULL)
 		return (NULL);
-	i = 0;
-	while (i < length)
-	{
-		word[i] = s[i];
-		i++;
-	}
-	word[i] = '\0';
+	ft_strlcpy(word, s, length + 1);
 	return (word);
 }
 
@@ -86,7 +95,7 @@ static void	fill_arr(char **arr, size_t words, char const *s, char c)
 		word = get_word(s, c);
 		if (word == NULL)
 		{
-			clean_up(arr, i);
+			ft_free_str_arr(arr, i);
 			return ;
 		}
 		arr[i] = word;
@@ -95,17 +104,4 @@ static void	fill_arr(char **arr, size_t words, char const *s, char c)
 			s++;
 	}
 	arr[i] = NULL;
-}
-
-char	**ft_split(char const *s, char c)
-{
-	char	**arr;
-	size_t	number_of_words;
-
-	number_of_words = count_words(s, c);
-	arr = malloc(sizeof(char *) * (number_of_words + 1));
-	if (arr == NULL)
-		return (NULL);
-	fill_arr(arr, number_of_words, s, c);
-	return (arr);
 }

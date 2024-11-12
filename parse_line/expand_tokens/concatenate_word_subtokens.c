@@ -6,11 +6,11 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:23:57 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/25 16:45:19 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:43:24 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parse_line.h"
+#include "../../libft/libft.h"
 
 static char	*malloc_word(t_list *subtokens)
 {

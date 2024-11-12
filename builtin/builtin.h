@@ -6,24 +6,28 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 12:32:16 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/25 18:02:08 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/12 12:01:09 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTIN_H
 # define BUILTIN_H
 
-# include "../includes/t_shell_data.h"
-# include "../parse_line/parse_line.h"
-# include "../env_var/env_var.h"
+# include "../setup/setup.h"
 
-void	builtin_echo(t_command *command, t_shell_data *data);
-void	builtin_cd(t_command *command, t_shell_data *data);
-void	builtin_pwd(t_command *command, t_shell_data *data);
-void	builtin_env(t_command *command, t_shell_data *data);
-void	builtin_export(t_command *command, t_shell_data *data);
-void	builtin_unset(t_command *command, t_shell_data *data);
+// putting
+int		builtin_echo(int argc, char **argv);
 
-void	builtin_exit(t_list *commands, t_shell_data *data);
+// directories
+int		builtin_cd(int argc, char **argv, t_shell_data *data);
+int		builtin_pwd(int argc, char **argv);
+
+// environment variables
+int		builtin_env(int argc, char **argv, t_shell_data *data);
+int		builtin_export(int argc, char **argv, t_shell_data *data);
+int		builtin_unset(int argc, char **argv, t_shell_data *data);
+
+// exit and free everything
+void	builtin_exit(t_list *command_list, t_shell_data *data);
 
 #endif

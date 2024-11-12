@@ -6,11 +6,12 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:23:47 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/25 17:55:52 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:43:34 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parse_line.h"
+#include "../../libft/libft.h"
+#include "../token/token.h"
 
 static void	handle_quote(char *str, int *expand_vars)
 {

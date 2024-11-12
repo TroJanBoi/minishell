@@ -1,29 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdel_front.c                                  :+:      :+:    :+:   */
+/*   ft_lstfirst.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/25 10:40:10 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/25 11:21:55 by nteechar         ###   ########.fr       */
+/*   Created: 2024/11/07 15:41:40 by nteechar          #+#    #+#             */
+/*   Updated: 2024/11/07 16:07:38 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include <unistd.h>
 #include "t_list.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void *));
-
-// delete the first node in linked list
-// if there's only one element in list, set *lst = NULL
-void	ft_lstdel_front(t_list **lst, void (*del)(void *))
+t_list	*ft_lstfirst(t_list *lst)
 {
-	t_list	*next_node;
-
-	if (lst == NULL)
-		return ;
-	next_node = (*lst)->next;
-	ft_lstdelone(*lst, del);
-	*lst = next_node;
+	while (lst->prev)
+		lst = lst->prev;
+	return (lst);
 }

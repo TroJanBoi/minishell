@@ -6,12 +6,15 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 14:27:14 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/25 14:59:26 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:33:15 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
+
+# include <unistd.h>
+# include <stdlib.h>
 
 # include "conversion/conversion.h"
 # include "ft_printf/ft_printf.h"
@@ -21,5 +24,11 @@
 # include "memory/memory.h"
 # include "putting/putting.h"
 # include "type_check/type_check.h"
+
+# define TRUE 1
+# define FALSE 0
+
+# define SUCCESS 0
+# define ERROR 1
 
 #endif

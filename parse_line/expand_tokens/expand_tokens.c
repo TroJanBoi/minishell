@@ -6,11 +6,12 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:59:43 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/25 16:40:53 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:43:28 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parse_line.h"
+#include "../../libft/libft.h"
+#include "../token/token.h"
 
 t_token	*expand_word_token(t_token *token);
 

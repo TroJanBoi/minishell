@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 14:00:38 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/16 14:38:19 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/12 12:39:15 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,14 @@ static t_list	*create_new_node(t_list *lst, void *(*f)(void *),
 // ’f’ on the content of each node. Creates a new
 // list resulting of the successive applications of
 // the function ’f’.
-// TODO: ft_lstadd_back should not be used (implement tail node)
+// - del function is for deleting incomplete created list
+// - if del function is NULL, do nothing with the lst->content
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
 	t_list	*new_lst;
+	t_list	*last_node;
 	t_list	*new_node;
 
-	if (lst == NULL || f == NULL)
-		return (NULL);
 	new_lst = NULL;
 	while (lst)
 	{
@@ -57,7 +57,11 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 			ft_lstclear(&new_lst, del);
 			return (NULL);
 		}
-		ft_lstadd_back(&new_lst, new_node);
+		if (new_lst == NULL)
+			new_lst = new_node;
+		else
+			ft_lstadd_back(&last_node, new_node);
+		last_node = new_node;
 		lst = lst->next;
 	}
 	return (new_lst);

@@ -6,50 +6,59 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 12:33:51 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/29 18:07:30 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/11 19:06:20 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../libft/libft.h"
+#include "builtin.h"
 
-// TODO: check memory safety! (Right now, there will likely be leaks!!!)
-static void	handle_one_var(t_command *command, int i, t_shell_data *data)
+static void	export_single_var(char *env_var_line, t_shell_data *data)
 {
-	t_env_var	*var_arg;
-	t_env_var	*var_envp;
-	t_list		*envp;
+	char	**key_value_pair;
+	char	*key;
+	char	*value;
+	t_list	*added_node;
 
-	var_arg = process_key_value_line(command->argv[i]);
-	if (var_arg == NULL)
+	key_value_pair = split_env_var_line(env_var_line);
+	if (key_value_pair == NULL)
 	{
-		data->exit_status = EXIT_FAILURE;
+		// cleanup
 		return ;
 	}
-	envp = data->env_vars;
-	while (envp)
+	key = key_value_pair[0];
+	value = key_value_pair[1];
+	if (!ft_isalpha(key[0]))
 	{
-		var_envp = envp->content;
-		if (ft_strcmp(var_arg->key, var_envp->key) == 0)
-		{
-			var_envp->value = ft_strdup(var_arg->value);
-			free_env_var(var_arg);
-			data->exit_status = EXIT_SUCCESS;
-			return ;
-		}
-		envp = envp->next;
+		ft_putstr_fd("minishell: export: '", STDERR_FILENO);
+		ft_putstr_fd(key, STDERR_FILENO);
+		ft_putstr_fd("': not a valid identifier", STDERR_FILENO);
+		return ;
 	}
-	ft_lstnew_add_back(&data->env_vars, var_arg);
+	added_node = add_env_var(key, value, &data->env_var_list);
+	ft_free_str_arr(key_value_pair, 2);
+	if (added_node == NULL)
+	{
+		// cleanup
+		return ;
+	}
 }
 
-// set environment variable(s)
-void	builtin_export(t_command *command, t_shell_data *data)
+// - set environment variable(s)
+// - usage: export key[=value] ...
+// - iterate over each argv
+// - key must begin with alphabet, if not,
+//   log error, set errno and don't set env var
+// - if value is not given, don't set env var
+int	builtin_export(int argc, char **argv, t_shell_data *data)
 {
 	int	i;
 
 	i = 1;
-	while (i < command->argc)
+	while (i < argc)
 	{
-		handle_one_var(command, i, data);
+		export_single_var(argv[i], data);
 		i++;
 	}
+	return (SUCCESS);
 }

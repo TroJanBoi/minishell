@@ -6,11 +6,12 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 13:47:13 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/20 13:55:57 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:42:42 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parse_line.h"
+#include "../../libft/libft.h"
+#include "../token/token.h"
 
 int	add_command(t_list **commands, t_list **temp_argv, t_list **temp_redirs);
 

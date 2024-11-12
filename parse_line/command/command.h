@@ -6,15 +6,17 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 09:13:53 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/25 16:10:24 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:41:05 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COMMAND_H
 # define COMMAND_H
 
+# include "../../libft/list/t_list.h"
+
 // command class
-typedef struct s_commands
+typedef struct s_command
 {
 	int		argc;
 	char	**argv;

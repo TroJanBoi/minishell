@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 11:16:10 by nteechar          #+#    #+#             */
-/*   Updated: 2024/10/25 11:25:55 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/11 15:55:40 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define FT_STRING_H
 
 # include <unistd.h>
+
+void	ft_free_str_arr(char **arr, size_t n);
 
 char	**ft_split(char const *s, char c);
 char	**ft_strtok(char *str, const char *delim);

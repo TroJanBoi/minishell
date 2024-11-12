@@ -6,11 +6,16 @@
 #    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/05 13:18:31 by nteechar          #+#    #+#              #
-#    Updated: 2024/10/25 15:30:42 by nteechar         ###   ########.fr        #
+#    Updated: 2024/11/12 14:48:08 by nteechar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
+
+# colors
+RED = \033[31m
+GREEN = \033[32m
+RESET = \033[0m
 
 # commands
 CC = cc
@@ -19,16 +24,18 @@ RM = rm -rf
 AR = ar rcs
 
 # files
-HEADERS = conversion/conversion.h \
+HEADERS = libft.h \
+	conversion/conversion.h \
 	ft_printf/ft_printf.h \
 	ft_string/ft_string.h \
 	get_next_line/get_next_line.h \
 	list/list.h list/t_list.h \
 	memory/memory.h \
 	putting/putting.h \
-	type_check/type_check.h
+	type_check/type_check.h \
 
-SRCS = conversion/ft_atoi.c conversion/ft_tolower.c \
+SRCS = \
+	conversion/ft_atoi.c conversion/ft_tolower.c \
 	conversion/ft_itoa.c conversion/ft_toupper.c \
 	\
 	ft_printf/ft_printf.c \
@@ -42,12 +49,12 @@ SRCS = conversion/ft_atoi.c conversion/ft_tolower.c \
 	ft_string/ft_strnstr.c ft_string/ft_strtok.c ft_string/ft_strtrim.c \
 	ft_string/ft_substr.c \
 	\
-	get_next_line/get_next_line.c get_next_line/get_line_from_buffers.c \
+	get_next_line/get_next_line.c get_next_line/get_next_line_utils.c \
 	\
 	list/ft_lstadd_back.c list/ft_lstadd_front.c list/ft_lstclear.c \
-	list/ft_lstdelone.c list/ft_lstiter.c list/ft_lstlast.c \
-	list/ft_lstmap.c list/ft_lstnew_add_back.c list/ft_lstnew_add_front.c \
-	list/ft_lstnew.c list/ft_lstsize.c list/ft_lstmatch.c \
+	list/ft_lstdelone.c list/ft_lstfirst.c list/ft_lstiter.c \
+	list/ft_lstlast.c list/ft_lstmap.c list/ft_lstnew_add_back.c \
+	list/ft_lstnew_add_front.c list/ft_lstnew.c list/ft_lstsize.c \
 	\
 	memory/ft_bzero.c memory/ft_calloc.c memory/ft_memchr.c \
 	memory/ft_memcmp.c memory/ft_memcpy.c memory/ft_memmove.c \
@@ -58,7 +65,7 @@ SRCS = conversion/ft_atoi.c conversion/ft_tolower.c \
 	\
 	type_check/ft_isalnum.c type_check/ft_isalpha.c type_check/ft_isascii.c \
 	type_check/ft_isdigit.c type_check/ft_isinset.c type_check/ft_islower.c \
-	type_check/ft_isprint.c type_check/ft_isspace.c type_check/ft_isupper.c 
+	type_check/ft_isprint.c type_check/ft_isspace.c type_check/ft_isupper.c \
 
 OBJS = $(SRCS:%.c=%.o)
 
@@ -68,16 +75,19 @@ OBJS = $(SRCS:%.c=%.o)
 all: $(NAME)
 
 clean:
-	$(RM) $(OBJS)
+	@echo "$(RED)delete libft's .o files$(RESET)"
+	@$(RM) $(OBJS)
 
 fclean: clean
-	$(RM) $(NAME)
+	@echo "$(RED)delete libft.a$(RESET)"
+	@$(RM) $(NAME)
 
 re: fclean all
 
 # rules
-$(NAME): $(OBJS) $(HEADERS)
-	$(AR) $(NAME) $(OBJS)
+$(NAME): $(OBJS)
+	@echo "$(GREEN)create libft.a$(RESET)"
+	@$(AR) $(NAME) $(OBJS)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+%.o: %.c $(HEADERS)
+	@$(CC) $(CFLAGS) -c $< -o $@
