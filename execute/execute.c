@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:23:43 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/12 15:20:28 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/15 21:25:26 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,87 +18,30 @@ void	ft_err(char *txt)
 	exit(EXIT_FAILURE);
 }
 
-void	open_lastfile(t_list *cmd_lst)
+void    execute(char **cmd, t_list *envp)
 {
-	t_list				*redirs;
-	t_execute_command	*exe_cmd;
+	char		*path;
 
-	t_token				*operator;
-	t_token				*filename;
-
-	exe_cmd = cmd_lst->content;
-	redirs = exe_cmd->command->redirs;
-	while (redirs->content)
+	if (check_backslash(cmd[0]) == SUCCESS)
 	{
-		operator = redirs->content;
-		if (operator->type == INFILE)
+		if (check_path(cmd[0]) == SUCCESS)
+			path = ft_strdup(cmd[0]);
+		else
 		{
-			redirs = redirs->next;
-			filename = redirs->content;
-			if (filename->type == WORD)
-			{
-				exe_cmd->fd_in = open(filename->str, O_RDONLY);
-				if (exe_cmd->fd_in == -1)
-				{
-					perror(filename->str);
-					return ;
-				}
-			}
+			perror(cmd[0]);
+			exit(EXIT_FAILURE);
 		}
-		redirs = redirs->next;
 	}
-	dup2(exe_cmd->fd_in, STDIN_FILENO);
-	close(exe_cmd->fd_in);
-}
-
-void	redir_output_type_file(t_token *file, t_list *cmd_lst, int type)
-{
-	t_execute_command	*cmd;
-	int 				mode;
-
-	if (file->type != WORD)
-		return ;
-	if (type == APPEND)
-		mode = O_WRONLY | O_CREAT | O_APPEND;
-	else
-		mode = O_WRONLY | O_CREAT | O_TRUNC;
-	cmd = cmd_lst->content;
-	cmd->fd_out = open(file->str, mode, 0644);
-	if (cmd->fd_out == -1)
+	path = find_path("PATH", envp, cmd[0]);
+	// printf("%sPATH : %s%s\n",RED, path, RESET);
+	if (execve(path, cmd, envp->content) == -1) // TODO: insert sub-shell builtin logic here
 	{
-		perror("failed file descriptor");
+		dprintf(2, "%s: command not found\n", cmd[0]);
 		exit(EXIT_FAILURE);
 	}
-	dup2(cmd->fd_out, STDOUT_FILENO);
-	close(cmd->fd_out);
 }
 
-void	handle_redirection_output(t_list *cmd_lst)
-{
-	t_list				*redirs;
-	t_token				*operator;
-	t_token				*filename;
-	t_execute_command	*exe_cmd;
-
-	exe_cmd = cmd_lst->content;
-	redirs = exe_cmd->command->redirs;
-	while (redirs->content)
-	{
-		operator = redirs->content;
-		if (operator->type == OUTFILE || operator->type == APPEND)
-		{
-			if (operator->type == OUTFILE) dprintf(2, "%s>>>> Output Mode <<<<%s\n", YELLOW, RESET);
-			else dprintf(2, "%s>>>> Append Mode <<<<%s\n", YELLOW, RESET);
-
-			redirs = redirs->next;
-			filename = redirs->content;
-			redir_output_type_file(filename, cmd_lst, operator->type);
-		}
-		redirs = redirs->next;
-	}
-}
-
-void	ft_childprocess(t_list *cmd_lst, int *prev_fd, char **envp)
+void	ft_childprocess(t_list *cmd_lst, int *prev_fd, t_shell_data *envp)
 {
 	t_execute_command	*cmd;
 
@@ -116,34 +59,14 @@ void	ft_childprocess(t_list *cmd_lst, int *prev_fd, char **envp)
 	}
 	if (cmd->command->redirs->content)
 	{
-		open_lastfile(cmd_lst);
+		handle_redirection_input(cmd_lst);
 		handle_redirection_output(cmd_lst);
 	}
-	if (execve(cmd->command->argv[0], cmd->command->argv, envp) == -1)  // TODO: insert sub-shell builtin logic here
-	{
-		dprintf(2, "execve error\n");
-		perror(cmd->command->argv[0]);
-		exit(EXIT_FAILURE);
-	}
+	execute(cmd->command->argv, envp->env_var_list);
+
 }
 
-int	wait_allprocess(t_list *cmd_lst)
-{
-	int					exit_status;
-	t_execute_command	*cmd;
-
-	exit_status = SUCCESS;
-	while (cmd_lst)
-	{
-		cmd = cmd_lst->content;
-		if (cmd->pid > 0)
-			waitpid(cmd->pid, NULL, 0);  // TODO: get exit_status from child process
-		cmd_lst = cmd_lst->next;
-	}
-	return (exit_status);
-}
-
-void	sub_execute(t_list *cmd_lst, char **envp)
+void	sub_execute(t_list *cmd_lst, t_shell_data *envp)
 {
 	int					prev_fd;
 	t_execute_command	*cmd;
@@ -161,11 +84,9 @@ void	sub_execute(t_list *cmd_lst, char **envp)
 			dprintf(2, "pid->%d\n", cmd->pid);
 			if (cmd->pid < 0)
 				ft_err("fork failed");
-			
 			// child process
 			if (cmd->pid == 0)
 				ft_childprocess(cmd_lst, &prev_fd, envp);  // TODO: replace envp with custom-envp
-			
 			// parent process
 			if (cmd_lst->next) // ถ้ามีตัว command ตัวต่อไป
 			{
@@ -182,26 +103,22 @@ void	sub_execute(t_list *cmd_lst, char **envp)
 }
 
 // free_exe_list(cmd_list);  (after executing ??)
-int	execute(t_list *commands, char **envp)
+t_exit_status	main_execute(t_list *commands, t_shell_data *envp)
 {
 	int		exit_status;
 	t_list	*execute_command_list;
 
 	// printf("%sStart execute%s\n", GREEN, RESET);
-	
 	if (check_file(commands) == ERROR)
 		return (ERROR);
 	execute_command_list = init_execute_command_list(commands);
 	if (execute_command_list == NULL)
 		return (ERROR);
-		
 	print_execute_commands(execute_command_list);
-	
 	sub_execute(execute_command_list, envp);
 	exit_status = wait_allprocess(execute_command_list);
-	
+	// dprintf(2, "Exit status : %d\n", exit_status);
 	// free_execute_command_list(&execute_command_list);
-	
 	// printf("%sEnd of execute%s\n", GREEN, RESET);
 	return (exit_status);
 }

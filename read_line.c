@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   read_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 18:42:36 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/12 12:02:17 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/13 14:45:49 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <errno.h>
 #include "readline/readline.h"
 #include "readline/history.h"

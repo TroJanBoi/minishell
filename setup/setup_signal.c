@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   setup_signal.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 10:38:43 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/12 15:11:52 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:02:35 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
 #include <sys/types.h>
@@ -22,12 +23,17 @@ int		g_signal_global;
 
 void	ft_sigint(int signal)
 {
+	dprintf(2, ">>>> signal : %d <<<<\n", signal);
+	dprintf(2, ">>>> g_sign : %d <<<<\n", g_signal_global);
+	dprintf(2, ">>>> SIGINT : %d <<<<\n", SIGINT);
 	if (signal == SIGINT && g_signal_global == 0)
 	{
 		rl_on_new_line();
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		rl_replace_line("", 0);
+		rl_redisplay();
 	}
+
 	return ;
 }
 
@@ -40,6 +46,7 @@ void	setup_signal(void)
 	act_int.sa_handler = &ft_sigint;
 	act_int.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &act_int, NULL);
+	
 	sigemptyset(&act_int.sa_mask);
 	act_quit.sa_handler = SIG_IGN;
 	act_quit.sa_flags = SA_RESTART;

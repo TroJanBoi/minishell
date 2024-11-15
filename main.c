@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 16:50:49 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/12 15:09:29 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:31:01 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	main(int argc, char **argv, char **envp)
 		free(line);
 		if (command_list == NULL)
 			builtin_exit(NULL, data);
-		data->exit_status = execute(command_list, envp);
+		data->exit_status = main_execute(command_list, data);
 		// printf("execute finish\n");
 		// printf("free start\n");
 		// ft_lstclear(&command_list, free_command);
