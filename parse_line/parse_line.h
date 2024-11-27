@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 18:39:48 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/12 15:01:48 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/15 12:14:44 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,9 @@
 
 # include "../setup/setup.h"
 
-# include "token/token.h"
-# include "command/command.h"
+# include "tokenize/token.h"
+# include "create_commands/command.h"
 
 t_list	*parse_line(char *line, t_shell_data *data);
-
-t_list	*tokenize_line(char *line);
-t_list	*expand_tokens(t_list *tokens);
-int		is_grammar_correct(t_list *tokens);
-t_list	*tokens_to_commands(t_list *tokens);
 
 #endif

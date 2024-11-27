@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wait_process.c                                     :+:      :+:    :+:   */
+/*   wait_for_all_processes.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 02:14:34 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/15 02:14:45 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/20 17:43:30 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 
-int	wait_allprocess(t_list *cmd_lst)
+int	wait_for_all_processes(t_list *cmd_lst)
 {
-	int					exit_status;
-	t_execute_command	*cmd;
+	int			exit_status;
+	t_execute	*cmd;
+	int			status;
 
 	exit_status = SUCCESS;
 	while (cmd_lst)
 	{
 		cmd = cmd_lst->content;
 		if (cmd->pid > 0)
-			waitpid(cmd->pid, NULL, 0);  // TODO: get exit_status from child process
+			waitpid(cmd->pid, &status, 0);
+		if (WIFEXITED(status))
+			exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			exit_status = WTERMSIG(status) + 128;
 		cmd_lst = cmd_lst->next;
 	}
 	return (exit_status);

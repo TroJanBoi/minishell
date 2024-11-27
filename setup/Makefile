@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
+#    By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/07 18:57:57 by nteechar          #+#    #+#              #
-#    Updated: 2024/11/11 16:59:28 by nteechar         ###   ########.fr        #
+#    Updated: 2024/11/20 17:49:03 by pesrisaw         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ AR = ar rcs
 
 # files
 HEADERS = constants.h env_var.h setup.h
-SRCS = env_var_list.c env_var.c setup_signal.c setup.c
+SRCS = create_env_var_list.c env_var_list.c env_var.c setup_signal.c setup.c free_env.c
 OBJS = $(SRCS:%.c=%.o)
 
 # phony rules

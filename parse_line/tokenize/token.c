@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 14:39:37 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/07 18:43:19 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/15 15:56:39 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 // - have malloc'd duplicate of str for token->str
 // - have integer for token->type
 // return NULL if malloc error
-t_token	*create_token(char *str, t_token_type type)
+t_token	*create_token(char *str, int type)
 {
 	t_token	*token;
 
@@ -53,4 +53,10 @@ void	free_token(void *token)
 	token_ = token;
 	free(token_->str);
 	free(token_);
+}
+
+int	is_redir(t_token_type type)
+{
+	return (type == INFILE || type == OUTFILE \
+		|| type == HEREDOC || type == APPEND);
 }

@@ -6,19 +6,22 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 17:05:28 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/07 18:34:09 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/17 03:24:33 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
-#include "token/token.h"
+#include "tokenize/token.h"
 
 static int	is_redir_correct(t_list **tokens, int *have_command)
 {
+	t_token	*token;
+
 	if ((*tokens)->next == NULL)
 		return (FALSE);
 	*tokens = (*tokens)->next;
-	if (((t_token *)(*tokens)->content)->type != WORD)
+	token = (*tokens)->content;
+	if (token->type != WORD)
 		return (FALSE);
 	*have_command = TRUE;
 	return (TRUE);
@@ -39,7 +42,7 @@ int	is_grammar_correct(t_list *tokens)
 		token = tokens->content;
 		if (token->type == PIPE)
 		{
-			if (have_command == FALSE)
+			if (!have_command)
 				return (FALSE);
 			have_command = FALSE;
 		}
@@ -52,5 +55,5 @@ int	is_grammar_correct(t_list *tokens)
 		}
 		tokens = tokens->next;
 	}
-	return (TRUE);
+	return (have_command);
 }

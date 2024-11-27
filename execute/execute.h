@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:16:44 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/15 02:14:56 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/20 20:00:27 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,13 @@
 # include "../setup/setup.h"
 # include "../parse_line/parse_line.h"
 # include "../setup/env_var.h"
-#  include "../__debugging/__debugging.h"
+# include <readline/readline.h>
+# include <readline/history.h>
+# include "../builtin/builtin.h"
 
-typedef struct s_execute_command
+# include "../__debugging/__debugging.h"
+
+typedef struct s_execute
 {
 	t_command	*command;
 	int			pipe_fds[2];
@@ -28,30 +32,21 @@ typedef struct s_execute_command
 	int			fd_in;
 	int			fd_out;
 	pid_t		pid;
-}	t_execute_command;
+	int			fd_heredoc;
+}	t_execute;
 
 t_exit_status	main_execute(t_list *command, t_shell_data *envp);
 
-t_list	*init_execute_command_list(t_list *commands);
-void	free_execute_command_list(t_list **execute_command_list);
+t_list			*init_execute_command_list(t_list *commands);
+void			free_execute_command_list(t_list **execute_command_list);
 
-/*redirection input*/
-void	redir_input_type_file(t_token *file, t_list *cmd_lst, int type);
-void	handle_redirection_input(t_list *cmd_lst);
+char			*find_path(char *key, t_list *env_var_lst, char *cmd);
+int				check_infiles(t_list *token);
+char			*join_path(char **full_path, char *cmd);
 
-/*redirection output*/
-void	redir_output_type_file(t_token *file, t_list *cmd_lst, int type);
-void	handle_redirection_output(t_list *cmd_lst);
+void			run_heredocs(t_list *cmd_lst);
+void			command_not_found(char *cmd, int fd);
 
-/*wait*/
-int		wait_allprocess(t_list *cmd_lst);
-
-char	*find_path(char *key, t_list *env_var_lst, char *cmd);
-int		check_file(t_list *token);
-int		check_path(char *cmd);
-int		check_backslash(char *cmd);
-void	free_arr(char **arr);
-char	*join_path(char **full_path, char *cmd);
-int		ft_heredoc(char *delimiter);
+int				s_builtin(t_list *cmd_lst, t_execute *cmd, t_shell_data *envp);
 
 #endif

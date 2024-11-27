@@ -6,59 +6,90 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 12:33:51 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/11 19:06:20 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/17 04:37:45 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <errno.h>
 #include "../libft/libft.h"
 #include "builtin.h"
 
-static void	export_single_var(char *env_var_line, t_shell_data *data)
-{
-	char	**key_value_pair;
-	char	*key;
-	char	*value;
-	t_list	*added_node;
+#define NOT_A_VALID_KEY 1
 
-	key_value_pair = split_env_var_line(env_var_line);
-	if (key_value_pair == NULL)
+static int	is_valid_key(char *key)
+{
+	if (!ft_isalpha(*key))
+		return (FALSE);
+	key++;
+	while (*key)
 	{
-		// cleanup
-		return ;
+		if (!(ft_isalnum(*key) || *key == '_'))
+			return (FALSE);
+		key++;
 	}
-	key = key_value_pair[0];
-	value = key_value_pair[1];
-	if (!ft_isalpha(key[0]))
+	return (TRUE);
+}
+
+static int	export_single_var(char *env_var_line, t_shell_data *data)
+{
+	char		**key_value_pair;
+	char		*key;
+	char		*value;
+	t_list		*node;
+
+	if (ft_strchr(env_var_line, '='))
 	{
-		ft_putstr_fd("minishell: export: '", STDERR_FILENO);
-		ft_putstr_fd(key, STDERR_FILENO);
-		ft_putstr_fd("': not a valid identifier", STDERR_FILENO);
-		return ;
+		key_value_pair = split_env_var_line(env_var_line);
+		if (key_value_pair == NULL)
+			return (ENOMEM);
+		key = key_value_pair[0];
+		value = key_value_pair[1];
+		if (!is_valid_key(key))
+			return (NOT_A_VALID_KEY);
+		node = set_env_var(key, value, &data->env_var_list);
+		ft_free_str_arr(key_value_pair, 2);
+		if (node == NULL)
+			return (ENOMEM);
 	}
-	added_node = add_env_var(key, value, &data->env_var_list);
-	ft_free_str_arr(key_value_pair, 2);
-	if (added_node == NULL)
+	else
 	{
-		// cleanup
-		return ;
+		if (!is_valid_key(env_var_line))
+			return (NOT_A_VALID_KEY);
 	}
+	return (SUCCESS);
 }
 
 // - set environment variable(s)
+//
 // - usage: export key[=value] ...
+//
 // - iterate over each argv
-// - key must begin with alphabet, if not,
-//   log error, set errno and don't set env var
+// - valid key: [A-Za-z][A-Za-z0-9_]+
 // - if value is not given, don't set env var
-int	builtin_export(int argc, char **argv, t_shell_data *data)
+t_exit_status	builtin_export(int argc, char **argv, t_shell_data *data)
 {
-	int	i;
+	t_exit_status	ret;
+	int				export_status;
+	int				i;
 
+	ret = SUCCESS;
 	i = 1;
 	while (i < argc)
 	{
-		export_single_var(argv[i], data);
+		export_status = export_single_var(argv[i], data);
+		if (export_status == ENOMEM)
+		{
+			ret = ENOMEM;
+			break ;
+		}
+		else if (export_status == NOT_A_VALID_KEY)
+		{
+			ret = ERROR;
+			ft_putstr_fd("minishell: export: '", STDERR_FILENO);
+			ft_putstr_fd(argv[i], STDERR_FILENO);
+			ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+		}
 		i++;
 	}
-	return (SUCCESS);
+	return (ret);
 }

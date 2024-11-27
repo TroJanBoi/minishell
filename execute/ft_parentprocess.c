@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_backslash.c                                  :+:      :+:    :+:   */
+/*   ft_parentprocess.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 17:13:31 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/14 17:17:56 by pesrisaw         ###   ########.fr       */
+/*   Created: 2024/11/20 16:35:47 by pesrisaw          #+#    #+#             */
+/*   Updated: 2024/11/20 17:42:05 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 
-int	check_backslash(char *cmd)
+void	ft_parentprocess(t_list *cmd_lst, int *prev_fd, t_execute *cmd)
 {
-	int count;
-
-	count = 0;
-	if (!cmd)
-		return (EXIT_FAILURE);
-	while(*cmd)
+	if (cmd_lst->next)
 	{
-		if(*cmd == '/')
-			count++;
-		cmd++;
+		close(cmd->pipe_fds[1]);
+		if (*prev_fd != -1)
+			close(*prev_fd);
+		*prev_fd = cmd->pipe_fds[0];
 	}
-	if (count > 0)
-		return (EXIT_SUCCESS);
-	return (EXIT_FAILURE);
+	else if (*prev_fd != -1)
+		close(*prev_fd);
 }

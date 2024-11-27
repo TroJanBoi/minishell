@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command.h                                          :+:      :+:    :+:   */
+/*   ft_lstdel_front.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/20 09:13:53 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/07 18:41:05 by nteechar         ###   ########.fr       */
+/*   Created: 2024/11/16 14:37:05 by nteechar          #+#    #+#             */
+/*   Updated: 2024/11/16 14:42:39 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMAND_H
-# define COMMAND_H
+#include "t_list.h"
 
-# include "../../libft/list/t_list.h"
+t_list	*ft_lstfirst(t_list *lst);
+void	ft_lstdelone(t_list *lst, void (*del)(void *));
 
-// command class
-typedef struct s_command
+// remove first node of linked list
+// if del function is NULL, do nothing with the lst->content
+void	ft_lstdel_front(t_list **lst, void (*del)(void *))
 {
-	int		argc;
-	char	**argv;
-	t_list	*redirs;
-}	t_command;
+	t_list	*first_node;
 
-void	free_command(void *command);
-
-#endif
+	first_node = ft_lstfirst(*lst);
+	if (*lst == first_node)
+		*lst = first_node->next;
+	ft_lstdelone(first_node, del);
+}

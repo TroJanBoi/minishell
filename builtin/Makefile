@@ -6,7 +6,7 @@
 #    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/04 19:13:22 by nteechar          #+#    #+#              #
-#    Updated: 2024/11/07 10:02:29 by nteechar         ###   ########.fr        #
+#    Updated: 2024/11/16 18:06:58 by nteechar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ AR = ar rcs
 
 # files
 HEADERS = builtin.h
-SRCS = builtin_cd.c builtin_echo.c builtin_env.c builtin_exit.c \
+SRCS = execute_builtin.c is_builtin_name.c \
+	builtin_cd.c builtin_echo.c builtin_env.c builtin_exit.c \
 	builtin_export.c builtin_pwd.c builtin_unset.c
 OBJS = $(SRCS:%.c=%.o)
 

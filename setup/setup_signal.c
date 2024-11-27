@@ -6,7 +6,7 @@
 /*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 10:38:43 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/13 15:02:35 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/27 17:12:35 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,31 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "../libft/libft.h"
-
-int		g_signal_global;
+#include "../builtin/builtin.h"
 
 void	ft_sigint(int signal)
 {
-	dprintf(2, ">>>> signal : %d <<<<\n", signal);
-	dprintf(2, ">>>> g_sign : %d <<<<\n", g_signal_global);
-	dprintf(2, ">>>> SIGINT : %d <<<<\n", SIGINT);
-	if (signal == SIGINT && g_signal_global == 0)
+	if (signal == SIGINT)
 	{
-		rl_on_new_line();
+		if (g_signal_global == 1)
+			return (ft_putstr_fd("\n", STDOUT_FILENO));
 		ft_putstr_fd("\n", STDOUT_FILENO);
+		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-
 	return ;
+}
+
+void	ft_sigquit(int signal)
+{
+	if (signal == SIGQUIT)
+	{
+		ft_putendl_fd("Quit (core dumped)", STDIN_FILENO);
+		ft_putstr_fd("\n", STDOUT_FILENO);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+	}
 }
 
 void	setup_signal(void)
@@ -45,10 +53,10 @@ void	setup_signal(void)
 	sigemptyset(&act_int.sa_mask);
 	act_int.sa_handler = &ft_sigint;
 	act_int.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &act_int, NULL);
+	sigaction(SIGINT, &act_int, 0);
 	
-	sigemptyset(&act_int.sa_mask);
-	act_quit.sa_handler = SIG_IGN;
+	sigemptyset(&act_quit.sa_mask);
+	act_quit.sa_handler = &ft_sigquit;
 	act_quit.sa_flags = SA_RESTART;
-	sigaction(SIGQUIT, &act_quit, NULL);
+	sigaction(SIGQUIT, &act_quit, 0);
 }

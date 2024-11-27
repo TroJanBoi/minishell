@@ -3,75 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   env_var_list.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 15:39:58 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/11 18:53:21 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/20 17:48:28 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "../libft/libft.h"
 #include "env_var.h"
-
-char	**split_env_var_line(char *env_var_line)
-{
-	char	**key_value_pair;
-	char	*first_equal_sign;
-	size_t	key_length;
-	size_t	value_length;
-
-	key_value_pair = malloc(2 * sizeof(char *));
-	if (key_value_pair == NULL)
-		return (NULL);
-	first_equal_sign = ft_strchr(env_var_line, '=');
-	key_length = first_equal_sign - env_var_line;
-	value_length = ft_strlen(first_equal_sign + 1);
-	key_value_pair[0] = ft_substr(env_var_line, 0, key_length);
-	key_value_pair[1] = ft_substr(env_var_line, key_length + 1, value_length);
-	if (key_value_pair[0] == NULL || key_value_pair[1] == NULL)
-	{
-		if (key_value_pair[0])
-			free(key_value_pair[0]);
-		if (key_value_pair[1])
-			free(key_value_pair[1]);
-		free(key_value_pair);
-		return (NULL);
-	}
-	return (key_value_pair);
-}
-
-t_list	*create_env_var_list(char **envp)
-{
-	t_list		*list;
-	char		**key_value_pair;
-	t_list		*added_node;
-
-	list = NULL;
-	while (*envp)
-	{
-		key_value_pair = split_env_var_line(*envp);
-		if (key_value_pair == NULL)
-		{
-			free_env_var_list(&list);
-			return (NULL);
-		}
-		added_node = add_env_var(key_value_pair[0], key_value_pair[1], &list);
-		ft_free_str_arr(key_value_pair, 2);
-		if (added_node == NULL)
-		{
-			free_env_var_list(&list);
-			return (NULL);
-		}
-		envp++;
-	}
-	return (list);
-}
-
-void	free_env_var_list(t_list **env_var_list)
-{
-	ft_lstclear(env_var_list, free_env_var);
-}
 
 // return ptr to the env_var's node having "key"
 t_list	*find_env_var(char *key, t_list *env_var_list)
@@ -89,21 +30,34 @@ t_list	*find_env_var(char *key, t_list *env_var_list)
 }
 
 // return address of env_var's node if malloc'd successfully, NULL if not
-t_list	*add_env_var(char *key, char *value, t_list **env_var_list)
+// - if key is already in the list, replace value
+t_list	*set_env_var(char *key, char *value, t_list **env_var_list)
 {
-	t_list		*added_node;
+	t_list		*node;
 	t_env_var	*var;
+	char		*temp;
 
+	node = find_env_var(key, *env_var_list);
+	if (node)
+	{
+		var = node->content;
+		temp = ft_strdup(value);
+		if (temp == NULL)
+			return (NULL);
+		free(var->value);
+		var->value = temp;
+		return (node);
+	}
 	var = create_env_var(key, value);
 	if (var == NULL)
 		return (NULL);
-	added_node = ft_lstnew_add_back(env_var_list, var);
-	if (added_node == NULL)
+	node = ft_lstnew_add_back(env_var_list, var);
+	if (node == NULL)
 	{
 		free_env_var(var);
 		return (NULL);
 	}
-	return (added_node);
+	return (node);
 }
 
 void	del_env_var(char *key, t_list **env_var_list)
@@ -126,4 +80,30 @@ void	print_env_var_list(t_list *env_var_list)
 		printf("%s=%s\n", var->key, var->value);
 		env_var_list = env_var_list->next;
 	}
+}
+
+char	**get_envp(t_list *env_var_list)
+{
+	char		**arr;
+	t_env_var	*env_var;
+	size_t		i;
+
+	arr = malloc((ft_lstsize(env_var_list) + 1) * sizeof(char *));
+	if (arr == NULL)
+		return (NULL);
+	i = 0;
+	while (env_var_list)
+	{
+		env_var = env_var_list->content;
+		arr[i] = ft_strjoin_all(3, env_var->key, "=", env_var->value);
+		if (arr[i] == NULL)
+		{
+			ft_free_str_arr(arr, i);
+			return (NULL);
+		}
+		i++;
+		env_var_list = env_var_list->next;
+	}
+	arr[i] = NULL;
+	return (arr);
 }

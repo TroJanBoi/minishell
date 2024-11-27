@@ -6,16 +6,33 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 12:31:11 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/12 11:59:44 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/16 17:46:25 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
 #include "builtin.h"
 
+// valid flag: -[n]{1,}
+static int	is_n_flag(char *str)
+{
+	if (*str != '-')
+		return (FALSE);
+	str++;
+	if (*str == '\0')
+		return (FALSE);
+	while (*str)
+	{
+		if (*str != 'n')
+			return (FALSE);
+		str++;
+	}
+	return (TRUE);
+}
+
 static void	apply_options(int argc, char **argv, int *i, int *put_newline)
 {
-	while (*i < argc && ft_strcmp(argv[*i], "-n") == 0)
+	while (*i < argc && is_n_flag(argv[*i]))
 	{
 		*put_newline = FALSE;
 		(*i)++;
@@ -24,20 +41,21 @@ static void	apply_options(int argc, char **argv, int *i, int *put_newline)
 
 static void	print_stuffs(int argc, char **argv, int *i)
 {
-	while (*i < argc)
+	while (*i < argc - 1)
 	{
-		ft_printf("%s", argv[*i]);
-		if (*i < argc - 1)
-			ft_printf(" ");
+		ft_printf("%s ", argv[*i]);
 		(*i)++;
 	}
+	ft_printf("%s", argv[*i]);
+	(*i)++;
 }
 
-int	builtin_echo(int argc, char **argv)
+t_exit_status	builtin_echo(int argc, char **argv, t_shell_data *data)
 {
 	int		put_newline;
 	int		i;
 
+	(void) data;
 	put_newline = TRUE;
 	i = 1;
 	if (i < argc)

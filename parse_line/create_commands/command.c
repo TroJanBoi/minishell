@@ -6,22 +6,26 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 14:39:51 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/12 15:09:55 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/15 13:34:39 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../libft/libft.h"
-#include "../token/token.h"
+#include "../tokenize/token.h"
 #include "command.h"
 
-// t_command	*create_command(char **argv, t_token *redirs)
-// {
-// 	t_command	*command;
+t_command	*malloc_command(void)
+{
+	t_command	*command;
 
-// 	(void) argv; (void) redirs;
-// 	command = NULL;
-// 	return (command);
-// }
+	command = malloc(sizeof(t_command));
+	if (command == NULL)
+		return (command);
+	command->argc = 0;
+	command->argv = NULL;
+	command->redirs = NULL;
+	return (command);
+}
 
 void	free_command(void *command)
 {

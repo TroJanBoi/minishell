@@ -6,7 +6,7 @@
 #    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/06 12:35:51 by nteechar          #+#    #+#              #
-#    Updated: 2024/11/07 09:57:37 by nteechar         ###   ########.fr        #
+#    Updated: 2024/11/16 18:07:25 by nteechar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,27 +19,25 @@ RM = rm -rf
 AR = ar rcs
 
 # files
-HEADERS = token/token.h command/command.h parse_line.h
-SRCS = command/command.c \
-	\
-	expand_tokens/concatenate_word_subtokens.c \
+HEADERS = tokenize/token.h create_commands/command.h parse_line.h
+SRCS = \
+	expand_tokens/chop_word.c \
+	expand_tokens/concatenate_subtokens.c \
 	expand_tokens/expand_tokens.c \
-	expand_tokens/expand_word_subtokens.c \
-	expand_tokens/expand_word_token.c \
-	expand_tokens/tokenize_word.c \
+	expand_tokens/interpret_single_subtoken.c \
+	expand_tokens/interpret_subtokens.c \
+	expand_tokens/expand_variable.c \
 	\
-	token/token.c \
+	tokenize/token.c \
+	tokenize/extract_token.c \
+	tokenize/tokenize_line.c \
 	\
-	tokenize_line/get_token_str.c \
-	tokenize_line/get_token_type.c \
-	tokenize_line/get_token.c \
-	tokenize_line/tokenize_line.c \
+	create_commands/command.c \
+	create_commands/create_command_list.c \
+	create_commands/get_argv_and_redirs.c \
 	\
-	tokens_to_commands/handle_tokens.c \
-	tokens_to_commands/tokens_to_commands.c \
-	tokens_to_commands/transform_tokens.c \
-	\
-	is_grammar_correct.c parse_line.c
+	is_grammar_correct.c parse_line.c combine_redirs.c
+
 OBJS = $(SRCS:%.c=%.o)
 
 # phony rules

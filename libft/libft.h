@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 14:27:14 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/07 18:33:15 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/12 16:28:56 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@
 
 # define TRUE 1
 # define FALSE 0
+
+# define CORRECT TRUE
+# define WRONG FALSE
 
 # define SUCCESS 0
 # define ERROR 1

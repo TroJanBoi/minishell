@@ -6,7 +6,7 @@
 /*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 18:42:36 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/13 14:45:49 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/27 17:11:27 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,51 +17,41 @@
 #include "libft/libft.h"
 #include "setup/setup.h"
 
-// char	*get_prompt(void)
-// {
-// 	char	*cwd;
-// 	char	*prompt;
+#define AS_BIG_AS_NECESSARY 0
 
-// 	cwd = getcwd(NULL, 0);
-// 	if (cwd == NULL)
-// 		return (NULL);
-// 	prompt = ft_strjoin_all(3, "minishell:", cwd, "$ ");
-// 	free(cwd);
-// 	if (prompt == NULL)
-// 		return (NULL);
-// 	return (prompt);
-// }
-char	*get_prompt(void)
+#define S_RED "\033[31m"
+#define HELL_RED "\033[4;31m"
+#define RESET "\033[0m"
+#define MINISHELL "minis\1"RESET HELL_RED"\2hell\1"RESET"\2"
+
+static char	*get_prompt(void)
 {
+	char	*path;
 	char	*prompt;
 
-	prompt = ft_strdup("minishell$ ");
-	return (prompt);
-}
-
-char	*display_prompt_and_get_line(void)
-{
-	char	*prompt;	
-	char	*line;
-
-	prompt = get_prompt();
-	if (prompt == NULL)
+	path = getcwd(NULL, AS_BIG_AS_NECESSARY);
+	if (path == NULL)
 		return (NULL);
-	line = readline(prompt);
-	free(prompt);
-	return (line);
+	prompt = ft_strjoin_all(4, MINISHELL, ":", path, "$ ");
+	free(path);
+	return (prompt);
 }
 
 char	*read_line(t_shell_data *data)
 {
+	char	*prompt;
 	char	*line;
 
-	line = display_prompt_and_get_line();
-	if (line == NULL)
+	prompt = get_prompt();
+	if (prompt == NULL)
 	{
 		data->exit_status = ENOMEM;
 		return (NULL);
 	}
+	line = readline(prompt);
+	free(prompt);
+	if (line == NULL)
+		return (NULL);
 	if (ft_strlen(line) > 0)
 		add_history(line);
 	return (line);

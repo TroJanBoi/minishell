@@ -1,51 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   concatenate_word_subtokens.c                       :+:      :+:    :+:   */
+/*   concatenate_subtokens.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:23:57 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/07 18:43:24 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/15 16:12:31 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../libft/libft.h"
+#include "../tokenize/token.h"
 
 static char	*malloc_word(t_list *subtokens)
 {
+	t_token	*subtoken;
 	size_t	length;
 
 	length = 0;
 	while (subtokens)
 	{
-		length += ft_strlen(subtokens->content);
+		subtoken = subtokens->content;
+		length += ft_strlen(subtoken->str);
 		subtokens = subtokens->next;
 	}
 	return (malloc(sizeof(char) * (length + 1)));
 }
 
-char	*concatenate_word_subtokens(t_list *subtokens)
+char	*concatenate_subtokens(t_list *subtokens)
 {
 	char	*word;
 	size_t	word_length;
-	char	*str;
-	size_t	new_length;
+	size_t	subtoken_length;
+	t_token	*subtoken;
 
 	word = malloc_word(subtokens);
 	if (word == NULL)
 		return (NULL);
-	word[0] = '\0';
 	word_length = 0;
 	while (subtokens)
 	{
-		str = subtokens->content;
-		new_length = word_length + ft_strlen(str);
-		if (ft_strlcat(word, str, new_length + 1) != new_length)
-			ft_putendl_fd("concatenate_subtokens: ft_strlcat truncated", \
-				STDERR_FILENO);
-		word_length = new_length;
+		subtoken = subtokens->content;
+		subtoken_length = ft_strlen(subtoken->str);
+		ft_memcpy(word + word_length, subtoken->str, subtoken_length);
+		word_length += subtoken_length;
 		subtokens = subtokens->next;
 	}
+	word[word_length] = '\0';
 	return (word);
 }

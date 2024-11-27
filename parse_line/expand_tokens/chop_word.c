@@ -1,41 +1,57 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenize_word.c                                    :+:      :+:    :+:   */
+/*   chop_word.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:23:40 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/07 18:43:41 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/17 01:05:59 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../libft/libft.h"
+#include "../tokenize/token.h"
 
-static char	*get_duplicate_substring(char *word)
+static t_subtoken_type	get_type(char *word)
+{
+	if (*word == '\'')
+		return (SINGLE_QUOTE);
+	if (*word == '\"')
+		return (DOUBLE_QUOTE);
+	if (*word == '$')
+	{
+		if (word[1] == '?')
+			return (EXIT_STATUS);
+		return (VARIABLE);
+	}
+	return (NORMAL);
+}
+
+static char	*extract_substring(char *word, t_subtoken_type type)
 {
 	int	i;
 
-	if (*word == '\'')
-		return (ft_strdup("\'"));
-	if (*word == '\"')
-		return (ft_strdup("\""));
 	i = 0;
-	if (*word == '$')
+	if (type == SINGLE_QUOTE || type == DOUBLE_QUOTE)
+		i++;
+	else if (type == VARIABLE)
 	{
 		i++;
 		while (ft_isalnum(word[i]))
 			i++;
 	}
+	else if (type == EXIT_STATUS)
+		i += 2;
 	else
 	{
-		while (word[i] != '\0' && !ft_isinset(word[i], "\'\"$\0", 4))
+		while (word[i] && !ft_isinset(word[i], "\'\"$", 3))
 			i++;
 	}
 	return (ft_substr(word, 0, i));
 }
 
-// word is guarunteed to not have whitespaces outside of quotes
+// word is guaruntee'd to not have whitespaces outside of quotes
 
 // Types
 // - quotes (could be either ' or ")
@@ -44,27 +60,32 @@ static char	*get_duplicate_substring(char *word)
 
 // whitespaces (inside quotes) is treates as 
 // a normal char, grouped with normal string
-t_list	*tokenize_word(char *word)
+t_list	*chop_word(char *word)
 {
-	t_list	*subtokens;
-	char	*str;
+	t_list			*subtokens;
+	t_subtoken_type	type;
+	char			*str;
+	t_token			*subtoken;
 
 	subtokens = NULL;
 	while (*word)
 	{
-		str = get_duplicate_substring(word);
-		if (str == NULL)
-		{
-			ft_lstclear(&subtokens, free);
-			return (NULL);
-		}
-		if (ft_lstnew_add_back(&subtokens, str) == NULL)
-		{
-			free(str);
-			ft_lstclear(&subtokens, free);
-			return (NULL);
-		}
+		type = get_type(word);
+		str = extract_substring(word, type);
+		subtoken = create_token(str, type);
 		word += ft_strlen(str);
+		free(str);
+		if (subtoken == NULL)
+		{
+			ft_lstclear(&subtokens, free);
+			return (NULL);
+		}
+		if (!ft_lstnew_add_back(&subtokens, subtoken))
+		{
+			free(subtoken);
+			ft_lstclear(&subtokens, free);
+			return (NULL);
+		}
 	}
 	return (subtokens);
 }

@@ -1,23 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_path.c                                       :+:      :+:    :+:   */
+/*   free_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 17:08:05 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/15 21:24:04 by pesrisaw         ###   ########.fr       */
+/*   Created: 2024/11/20 17:48:07 by pesrisaw          #+#    #+#             */
+/*   Updated: 2024/11/20 17:49:48 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "execute.h"
+#include "env_var.h"
 
-int check_path(char *cmd)
+void	free_env_var_list(t_list **env_var_list)
 {
-	if(access(cmd, X_OK) == SUCCESS)
-	{
-		// printf("%sSuccess access%s\n", GREEN, RESET);
-		return (EXIT_SUCCESS);
-	}
-	return (EXIT_FAILURE);
+	ft_lstclear(env_var_list, free_env_var);
 }

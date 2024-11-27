@@ -6,38 +6,66 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:59:43 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/07 18:43:28 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/17 00:27:24 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <errno.h>
 #include "../../libft/libft.h"
-#include "../token/token.h"
+#include "../../setup/setup.h"
+#include "../tokenize/token.h"
 
-t_token	*expand_word_token(t_token *token);
+t_list	*chop_word(char *word);
+int		interpret_subtokens(t_list **subtokens, t_shell_data *data);
+char	*concatenate_subtokens(t_list *subtokens);
 
-static void	*expand_token(void *content)
+// - free word and replace token->word with expanded word
+// - if malloc error, set *word = NULL
+static void	expand_word(char **token_str, t_shell_data *data)
 {
-	t_token	*token;
-	t_token	*expanded_token;
+	t_list	*subtokens;
+	char	*new_word;
+	int		ret;
 
-	token = content;
-	if (token->type == WORD)
-		expanded_token = expand_word_token(token);
-	else
-		expanded_token = copy_token(token);
-	if (expanded_token == NULL)
-		return (NULL);
-	return (expanded_token);
+	subtokens = chop_word(*token_str);
+	free(*token_str);
+	*token_str = NULL;
+	if (subtokens == NULL)
+		return ;
+	ret = interpret_subtokens(&subtokens, data);
+	if (ret == ENOMEM)
+	{
+		ft_lstclear(&subtokens, free_token);
+		return ;
+	}
+	new_word = concatenate_subtokens(subtokens);
+	ft_lstclear(&subtokens, free_token);
+	if (new_word == NULL)
+		return ;
+	*token_str = new_word;
 }
 
-// input: tokenized line
-// create a new chain of expanded WORD tokens
-t_list	*expand_tokens(t_list *tokens)
+// input: raw tokens
+// output: dequoted, expanded $, and expanded path
+// - if malloc error, tokens will be freed and set to NULL
+void	expand_tokens(t_list **tokens, t_shell_data *data)
 {
-	t_list	*expanded_tokens;
+	t_list	*node;
+	t_token	*token;
 
-	expanded_tokens = ft_lstmap(tokens, expand_token, free_token);
-	if (expanded_tokens == NULL)
-		return (NULL);
-	return (expanded_tokens);
+	node = *tokens;
+	while (node)
+	{
+		token = node->content;
+		if (token->type == WORD)
+		{
+			expand_word(&token->str, data);
+			if (token->str == NULL)
+			{
+				ft_lstclear(tokens, free_token);
+				return ;
+			}
+		}
+		node = node->next;
+	}
 }

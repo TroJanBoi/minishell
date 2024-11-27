@@ -1,29 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_token_type.c                                   :+:      :+:    :+:   */
+/*   ft_free_str_arr.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/16 16:47:21 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/07 18:30:08 by nteechar         ###   ########.fr       */
+/*   Created: 2024/11/16 21:29:52 by nteechar          #+#    #+#             */
+/*   Updated: 2024/11/16 21:45:35 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../libft/libft.h"
-#include "../token/token.h"
+#include <stdlib.h>
+#include <unistd.h>
 
-t_token_type	get_token_type(char *line)
+// - if n > 0: free n items in arr
+// - if n == 0: free items until encounter NULL
+void	ft_free_str_arr(char **arr, size_t n)
 {
-	if (ft_strncmp(line, ">>", 2) == 0)
-		return (APPEND);
-	if (ft_strncmp(line, ">", 1) == 0)
-		return (OUTFILE);
-	if (ft_strncmp(line, "<<", 2) == 0)
-		return (HEREDOC);
-	if (ft_strncmp(line, "<", 1) == 0)
-		return (INFILE);
-	if (ft_strncmp(line, "|", 1) == 0)
-		return (PIPE);
-	return (WORD);
+	size_t	i;
+
+	i = 0;
+	if (n > 0)
+	{
+		while (i < n)
+		{
+			free(arr[i]);
+			i++;
+		}
+	}
+	else
+	{
+		while (arr[i])
+		{
+			free(arr[i]);
+			i++;
+		}
+	}
+	free(arr);
 }

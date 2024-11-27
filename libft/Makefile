@@ -6,25 +6,25 @@
 #    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/05 13:18:31 by nteechar          #+#    #+#              #
-#    Updated: 2024/11/12 14:48:08 by nteechar         ###   ########.fr        #
+#    Updated: 2024/11/16 21:30:41 by nteechar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = libft.a
+NAME := libft.a
 
 # colors
-RED = \033[31m
-GREEN = \033[32m
-RESET = \033[0m
+RED := \033[31m
+GREEN := \033[32m
+RESET := \033[0m
 
 # commands
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
-RM = rm -rf
-AR = ar rcs
+CC := cc
+CFLAGS := -Wall -Wextra -Werror
+RM := rm -rf
+AR := ar rcs
 
 # files
-HEADERS = libft.h \
+HEADERS := libft.h \
 	conversion/conversion.h \
 	ft_printf/ft_printf.h \
 	ft_string/ft_string.h \
@@ -34,7 +34,7 @@ HEADERS = libft.h \
 	putting/putting.h \
 	type_check/type_check.h \
 
-SRCS = \
+SRCS := \
 	conversion/ft_atoi.c conversion/ft_tolower.c \
 	conversion/ft_itoa.c conversion/ft_toupper.c \
 	\
@@ -47,7 +47,7 @@ SRCS = \
 	ft_string/ft_strjoin.c ft_string/ft_strlcat.c ft_string/ft_strlcpy.c \
 	ft_string/ft_strlen.c ft_string/ft_strmapi.c ft_string/ft_strncmp.c \
 	ft_string/ft_strnstr.c ft_string/ft_strtok.c ft_string/ft_strtrim.c \
-	ft_string/ft_substr.c \
+	ft_string/ft_substr.c ft_string/ft_free_str_arr.c\
 	\
 	get_next_line/get_next_line.c get_next_line/get_next_line_utils.c \
 	\
@@ -55,6 +55,7 @@ SRCS = \
 	list/ft_lstdelone.c list/ft_lstfirst.c list/ft_lstiter.c \
 	list/ft_lstlast.c list/ft_lstmap.c list/ft_lstnew_add_back.c \
 	list/ft_lstnew_add_front.c list/ft_lstnew.c list/ft_lstsize.c \
+	list/ft_lstdel_front.c \
 	\
 	memory/ft_bzero.c memory/ft_calloc.c memory/ft_memchr.c \
 	memory/ft_memcmp.c memory/ft_memcpy.c memory/ft_memmove.c \
@@ -65,9 +66,11 @@ SRCS = \
 	\
 	type_check/ft_isalnum.c type_check/ft_isalpha.c type_check/ft_isascii.c \
 	type_check/ft_isdigit.c type_check/ft_isinset.c type_check/ft_islower.c \
-	type_check/ft_isprint.c type_check/ft_isspace.c type_check/ft_isupper.c \
+	type_check/ft_isprint.c type_check/ft_isspace.c type_check/ft_isupper.c
 
-OBJS = $(SRCS:%.c=%.o)
+OBJS := $(SRCS:%.c=%.o)
+
+COUNT := 0
 
 # phony rules
 .PHONY: all clean fclean re
@@ -75,19 +78,27 @@ OBJS = $(SRCS:%.c=%.o)
 all: $(NAME)
 
 clean:
-	@echo "$(RED)delete libft's .o files$(RESET)"
+	@echo "$(RED)> delete libft's .o files$(RESET)"
 	@$(RM) $(OBJS)
 
 fclean: clean
-	@echo "$(RED)delete libft.a$(RESET)"
+	@echo "$(RED)> delete libft.a$(RESET)"
 	@$(RM) $(NAME)
 
 re: fclean all
 
 # rules
 $(NAME): $(OBJS)
-	@echo "$(GREEN)create libft.a$(RESET)"
+	@echo "\n$(COUNT) .o files compiled"
+	@echo "$(GREEN)> create libft.a$(RESET)"
+	@echo "$(AR) $(NAME) $(firstword $(OBJS)) ... $(lastword $(OBJS))"
 	@$(AR) $(NAME) $(OBJS)
 
 %.o: %.c $(HEADERS)
+	@if [ $(COUNT) -eq 0 ]; then \
+		echo "$(GREEN)> compile .o files$(RESET)"; \
+	fi
+	@echo -n "|"
+	$(eval COUNT=$(shell echo $(COUNT) + 1 | bc))
+
 	@$(CC) $(CFLAGS) -c $< -o $@

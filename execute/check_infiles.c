@@ -1,28 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   join_path.c                                        :+:      :+:    :+:   */
+/*   check_infiles.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/14 17:43:30 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/20 01:25:42 by pesrisaw         ###   ########.fr       */
+/*   Created: 2024/10/02 21:46:02 by pesrisaw          #+#    #+#             */
+/*   Updated: 2024/11/16 21:35:35 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 
-char	*join_path(char **full_path, char *cmd)
+int	check_infiles(t_list *file)
 {
-	char	*full_path_with_cmd;
+	t_token	*redir;
 
-	while (*full_path)
+	while (file)
 	{
-		full_path_with_cmd = ft_strjoin_all(3, *full_path, "/", cmd);
-		if (access(full_path_with_cmd, X_OK) == SUCCESS)
-			return (full_path_with_cmd);
-		free(full_path_with_cmd);
-		full_path++;
+		redir = (t_token *)file->content;
+		if (redir->type == INFILE)
+		{
+			file = file->next;
+			redir = (t_token *)file->content;
+			if (redir->type == WORD)
+			{
+				if (access(redir->str, R_OK) != SUCCESS
+					|| (access(redir->str, R_OK | W_OK) != SUCCESS))
+				{
+					perror(redir->str);
+					return (ERROR);
+				}
+			}
+		}
+		file = file->next;
 	}
-	return (NULL);
+	return (SUCCESS);
 }

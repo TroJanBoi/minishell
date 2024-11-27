@@ -6,7 +6,7 @@
 #    By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/27 11:52:43 by nteechar          #+#    #+#              #
-#    Updated: 2024/11/13 14:51:11 by pesrisaw         ###   ########.fr        #
+#    Updated: 2024/11/27 17:11:46 by pesrisaw         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ RM = rm -rf
 SRCS = main.c read_line.c
 OBJS = $(SRCS:%.c=%.o)
 
-MODULE_DIRS = parse_line builtin execute setup __debugging
+MODULE_DIRS = parse_line execute builtin setup __debugging
 MODULES = $(foreach dir, $(MODULE_DIRS),$(dir)/$(dir).a)
 
 LIBFT_DIR = libft
@@ -40,7 +40,7 @@ LFLAGS = -L/usr/include -lreadline -lhistory
 # phony rules
 .PHONY: all clean fclean re $(LIBFT_DIR) $(MODULE_DIRS)
 
-all: $(NAME)
+all: $(LIBFT_DIR) $(MODULE_DIRS) $(NAME)
 
 clean:
 	@$(MAKE) clean -C $(LIBFT_DIR)
@@ -55,12 +55,13 @@ fclean:
 	@for dir in $(MODULE_DIRS); do \
 		$(MAKE) fclean -C $$dir; \
 	done
+	$(RM) $(OBJS)
 	$(RM) $(NAME)
 
 re: fclean all
 
 $(LIBFT_DIR) $(MODULE_DIRS):
-	@echo "$(BOLD)$(GREEN)build $@$(RESET)"
+	@echo "$(GREEN)build $@$(RESET)"
 	@$(MAKE) -C $@
 
 # rules
@@ -68,6 +69,7 @@ $(LIBFT): $(LIBFT_DIR)
 $(MODULES): $(MODULE_DIRS)
 
 $(NAME): $(LIBFT) $(MODULES) $(OBJS)
+	@echo "$(GREEN)link minishell$(RESET)"
 	$(CC) $(CFLAGS) $(OBJS) $(MODULES) $(LIBFT) $(LFLAGS) -o $(NAME)
 
 %.o: %.c

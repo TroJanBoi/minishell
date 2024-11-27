@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   __debugging.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 17:36:11 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/12 13:18:29 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/20 17:40:51 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	print_tokens(t_list *tokens, char *var_name)
 			printf("(NULL)---");
 			break ;
 		}
-		printf("(token(%i, %s))---", token->type, token->str);
+		printf("((%i, %s))---", token->type, token->str);
 		tokens = tokens->next;
 	}
 	printf("\n");
@@ -38,13 +38,13 @@ void	print_tokens(t_list *tokens, char *var_name)
 
 void	print_string_arr(char **arr, char *var_name)
 {
-	printf("%s = [ ", var_name);
+	printf("%s = [", var_name);
 	while (*arr)
 	{
-		printf("%s | ", *arr);
+		printf("%s|", *arr);
 		arr++;
 	}
-	printf("NULL ]");
+	printf("NULL]");
 	printf("\n");
 }
 
@@ -84,7 +84,7 @@ void	print_commands(t_list *commands)
 
 void	print_execute_commands(t_list *exe_list)
 {
-	t_execute_command	*exe_cmd;
+	t_execute	*exe_cmd;
 
 	while (exe_list)
 	{
