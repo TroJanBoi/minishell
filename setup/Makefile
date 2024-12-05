@@ -6,7 +6,7 @@
 #    By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/07 18:57:57 by nteechar          #+#    #+#              #
-#    Updated: 2024/11/20 17:49:03 by pesrisaw         ###   ########.fr        #
+#    Updated: 2024/11/27 19:00:49 by pesrisaw         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,14 +14,18 @@ NAME = setup.a
 
 # commands
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 RM = rm -rf
 AR = ar rcs
 
 # files
-HEADERS = constants.h env_var.h setup.h
-SRCS = create_env_var_list.c env_var_list.c env_var.c setup_signal.c setup.c free_env.c
-OBJS = $(SRCS:%.c=%.o)
+OBJS_DIR = .setup_objs
+
+HEADERS = setup.h shell_data.h constants.h 
+
+SRCS = init_minishell.c shell_data.c setup_signal.c setup_terminal.c
+
+OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
 # phony rules
 .PHONY: all clean fclean re
@@ -32,7 +36,7 @@ $(NAME): $(OBJS)
 	$(AR) $(NAME) $(OBJS)
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS_DIR)
 
 fclean: clean
 	$(RM) $(NAME)
@@ -40,5 +44,8 @@ fclean: clean
 re: fclean all
 
 # rules
-%.o: %.c $(HEADERS)
+$(OBJS_DIR)/%.o: %.c $(HEADERS) | $(OBJS_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJS_DIR):
+	mkdir -p $@

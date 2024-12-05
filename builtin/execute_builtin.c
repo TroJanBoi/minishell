@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 17:38:39 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/26 22:27:58 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/27 12:51:01 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_exit_status	execute_builtin(t_command *command, t_shell_data *data)
 	else if (ft_strcmp(name, "env") == 0)
 		data->exit_status = builtin_env(argc, argv, data);
 	else if (ft_strcmp(name, "exit") == 0)
-		builtin_exit(command, data);
+		builtin_exit(0, NULL, data);
 	else if (ft_strcmp(name, "export") == 0)
 		data->exit_status = builtin_export(argc, argv, data);
 	else if (ft_strcmp(name, "pwd") == 0)
@@ -42,6 +42,7 @@ t_exit_status	execute_builtin(t_command *command, t_shell_data *data)
 	return (data->exit_status);
 }
 
+// for "parent"-type builtin
 t_exit_status	p_execute_built(t_command *cmd, t_shell_data *data)
 {
 	int			argc;
@@ -54,7 +55,7 @@ t_exit_status	p_execute_built(t_command *cmd, t_shell_data *data)
 	if (ft_strcmp(name, "cd") == 0)
 		data->exit_status = builtin_cd(argc, argv, data);
 	else if (ft_strcmp(name, "exit") == 0)
-		builtin_exit(cmd, data);
+		builtin_exit(0, NULL, data);
 	else if (ft_strcmp(name, "export") == 0)
 		data->exit_status = builtin_export(argc, argv, data);
 	else if (ft_strcmp(name, "unset") == 0)

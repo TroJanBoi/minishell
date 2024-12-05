@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_not_found.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 18:20:02 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/20 01:25:10 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/27 13:45:31 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,6 @@ void	command_not_found(char *cmd, int fd)
 {
 	ft_putstr_fd(cmd, fd);
 	ft_putendl_fd(": command not found", fd);
+	// free everything
 	exit(ISSUE_PATH);
 }

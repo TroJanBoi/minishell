@@ -6,7 +6,7 @@
 #    By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/06 13:24:14 by nteechar          #+#    #+#              #
-#    Updated: 2024/11/20 17:33:22 by pesrisaw         ###   ########.fr        #
+#    Updated: 2024/12/05 14:19:15 by pesrisaw         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,17 +14,20 @@ NAME = execute.a
 
 # commands
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 RM = rm -rf
 AR = ar rcs
 
 # files
+OBJS_DIR = .execute_objs
+
 HEADERS = execute.h
+
 SRCS = setup_cmd_list.c find_path.c join_path.c run_heredocs.c \
 	wait_for_all_processes.c ft_childprocess.c handle_redir_input_output.c \
-	check_infiles.c execute.c command_not_found.c ft_parentprocess.c single_builtin.c
-
-OBJS = $(SRCS:%.c=%.o)
+	check_infiles.c execute.c command_not_found.c ft_parentprocess.c single_builtin.c \
+	__debugging.c
+OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
 # phony rules
 .PHONY: all clean fclean re
@@ -35,7 +38,7 @@ $(NAME): $(OBJS)
 	$(AR) $(NAME) $(OBJS)
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS_DIR)
 
 fclean: clean
 	$(RM) $(NAME)
@@ -43,5 +46,8 @@ fclean: clean
 re: fclean all
 
 # rules
-%.o: %.c $(HEADERS)
+$(OBJS_DIR)/%.o: %.c $(HEADERS) | $(OBJS_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJS_DIR):
+	mkdir -p $(OBJS_DIR)

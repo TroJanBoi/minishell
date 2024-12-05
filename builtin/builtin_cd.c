@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 12:18:48 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/16 16:53:20 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/26 09:39:11 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 
 static char	*get_path(int argc, char **argv, t_list *env_var_list)
 {
-	t_list	*node;
-	char	*path;
+	t_list		*node;
+	t_env_var	*env_var;
+	char		*path;
 
 	if (argc == 1)
 	{
@@ -26,21 +27,29 @@ static char	*get_path(int argc, char **argv, t_list *env_var_list)
 			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
 			return (NULL);
 		}
-		path = ((t_env_var *) node->content)->value;
+		env_var = node->content;
+		path = env_var->value;
 	}
 	else
 		path = argv[1];
 	return (path);
 }
 
+static void	put_error_message(char *path)
+{
+	ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+	ft_putstr_fd(path, STDERR_FILENO);
+	ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+}
+
 t_exit_status	builtin_cd(int argc, char **argv, t_shell_data *data)
 {
-	t_exit_status	ret;
 	char			*path;
+	t_exit_status	ret;
 
 	if (argc >= 3)
 	{
-		ft_putendl_fd("minishell: cd: too many arguments", STDERR_FILENO);
+		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
 		return (ERROR);
 	}
 	path = get_path(argc, argv, data->env_var_list);
@@ -48,10 +57,6 @@ t_exit_status	builtin_cd(int argc, char **argv, t_shell_data *data)
 		return (ERROR);
 	ret = chdir(path);
 	if (ret != SUCCESS)
-	{
-		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
-		ft_putstr_fd(path, STDERR_FILENO);
-		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
-	}
+		put_error_message(path);
 	return (ret);
 }

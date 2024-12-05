@@ -3,26 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   read_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 18:42:36 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/27 17:11:27 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/12/05 14:37:12 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <errno.h>
 #include "readline/readline.h"
 #include "readline/history.h"
 #include "libft/libft.h"
-#include "setup/setup.h"
+#include "setup/shell_data.h"
 
 #define AS_BIG_AS_NECESSARY 0
 
-#define S_RED "\033[31m"
-#define HELL_RED "\033[4;31m"
-#define RESET "\033[0m"
-#define MINISHELL "minis\1"RESET HELL_RED"\2hell\1"RESET"\2"
+// minishell with red 's' and red+underline 'hell'
+#define MINISHELL "\2mini\1\033[31m\2s\1\033[0m\033[4;31m\2hell\1\033[0m\2"
 
 static char	*get_prompt(void)
 {
@@ -34,10 +31,12 @@ static char	*get_prompt(void)
 		return (NULL);
 	prompt = ft_strjoin_all(4, MINISHELL, ":", path, "$ ");
 	free(path);
+	if (prompt == NULL)
+		return (NULL);
 	return (prompt);
 }
 
-char	*read_line(t_shell_data *data)
+static char	*get_line(t_shell_data *data)
 {
 	char	*prompt;
 	char	*line;
@@ -48,8 +47,20 @@ char	*read_line(t_shell_data *data)
 		data->exit_status = ENOMEM;
 		return (NULL);
 	}
-	line = readline(prompt);
+	// line = readline(prompt);
+	line = get_next_line(STDIN_FILENO);
 	free(prompt);
+	if (line == NULL)
+		return (NULL);
+	line[ft_strlen(line) - 1] = '\0';
+	return (line);
+}
+
+char	*read_line(t_shell_data *data)
+{
+	char	*line;
+
+	line = get_line(data);
 	if (line == NULL)
 		return (NULL);
 	if (ft_strlen(line) > 0)

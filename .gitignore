@@ -1,10 +1,11 @@
-# binaries
+# untracked programs
 *.o
 *.a
+*.out
+minishell
+#
 
-# personal
-LOGS
-DEBUG
-
-# weird files that I don't understand
+# folders
+.*_objs
 .vscode
+#

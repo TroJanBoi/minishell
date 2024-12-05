@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   put_hex.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:11:33 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/27 17:10:55 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:24:59 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // only takes 0 <= n <= 15
 static char	convert_to_upper_hex(unsigned int n)
 {
-	if (n <= 9)
+	if (0 <= n && n <= 9)
 		return (n + '0');
 	else
 		return (n - 10 + 'A');
@@ -24,7 +24,7 @@ static char	convert_to_upper_hex(unsigned int n)
 // only takes 0 <= n <= 15
 static char	convert_to_lower_hex(unsigned int n)
 {
-	if (n <= 9)
+	if (0 <= n && n <= 9)
 		return (n + '0');
 	else
 		return (n - 10 + 'a');

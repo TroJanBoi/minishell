@@ -6,7 +6,7 @@
 /*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:23:43 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/20 20:00:38 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/12/05 14:20:29 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	sub_execute(t_list *cmd_lst, t_shell_data *envp)
 	{
 		cmd = cmd_lst->content;
 		if (cmd->command->argv)
-		{
+		{	
 			if (cmd_lst->next && pipe(cmd->pipe_fds) == -1)
 				exit(EXIT_FAILURE);
 			cmd->pid = fork();
@@ -52,6 +52,7 @@ t_exit_status	main_execute(t_list *commands, t_shell_data *envp)
 	execute_command_list = init_execute_command_list(commands);
 	if (execute_command_list == NULL)
 		return (ERROR);
+	print_commands(commands);
 	run_heredocs(execute_command_list);
 	sub_execute(execute_command_list, envp);
 	exit_status = wait_for_all_processes(execute_command_list);

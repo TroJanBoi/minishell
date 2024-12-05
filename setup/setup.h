@@ -3,32 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   setup.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 18:57:55 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/20 17:55:33 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/27 15:30:20 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SETUP_H
 # define SETUP_H
 
-# include "../libft/list/t_list.h"
 # include "constants.h"
-# include "env_var.h"
+# include "shell_data.h"
 
-typedef int	t_exit_status;
+# define READ_MODE 0
+# define EXECUTE_MODE 1
 
-typedef struct s_shell_data
-{
-	t_exit_status	exit_status;
-	t_list			*env_var_list;
-}	t_shell_data;
+t_shell_data	*init_minishell(int argc, char **argv, char **envp);
 
-t_shell_data	*create_shell_data(int argc, char **argv, char **envp);
-void			free_shell_data(t_shell_data *data);
-
-t_shell_data	*init(int argc, char **argv, char **envp);
-void			free_env_var_list(t_list **env_var_list);
+void			disable_sigquit_echo(void);
+void			restore_terminal_settings(void);
 
 #endif

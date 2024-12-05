@@ -6,7 +6,7 @@
 /*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 02:09:53 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/20 17:41:56 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/27 19:30:44 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,4 @@ void	handle_redir_input_output(t_list *cmd_lst)
 		redirs = redirs->next;
 	}
 	dup2(exe_cmd->fd_in, STDIN_FILENO);
-	close(exe_cmd->fd_in);
 }

@@ -6,7 +6,7 @@
 /*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:16:44 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/20 20:00:27 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/12/05 14:20:51 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,15 @@
 
 # include <stdio.h>
 # include <fcntl.h>
-# include "../setup/setup.h"
-# include "../parse_line/parse_line.h"
-# include "../setup/env_var.h"
+
+# include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "../builtin/builtin.h"
 
-# include "../__debugging/__debugging.h"
+# include "../setup/setup.h"
+# include "../parser/parse_line.h"
+# include "../env_var/env_var.h"
+# include "../builtin/builtin.h"
 
 typedef struct s_execute
 {
@@ -48,5 +49,5 @@ void			run_heredocs(t_list *cmd_lst);
 void			command_not_found(char *cmd, int fd);
 
 int				s_builtin(t_list *cmd_lst, t_execute *cmd, t_shell_data *envp);
-
+void			print_commands(t_list *commands);
 #endif

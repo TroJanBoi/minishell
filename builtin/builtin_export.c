@@ -6,29 +6,16 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 12:33:51 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/17 04:37:45 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/11/27 14:41:37 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <errno.h>
-#include "../libft/libft.h"
 #include "builtin.h"
+#include "../libft/libft.h"
+#include "../env_var/env_var.h"
 
 #define NOT_A_VALID_KEY 1
-
-static int	is_valid_key(char *key)
-{
-	if (!ft_isalpha(*key))
-		return (FALSE);
-	key++;
-	while (*key)
-	{
-		if (!(ft_isalnum(*key) || *key == '_'))
-			return (FALSE);
-		key++;
-	}
-	return (TRUE);
-}
 
 static int	export_single_var(char *env_var_line, t_shell_data *data)
 {

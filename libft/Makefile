@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
+#    By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/05 13:18:31 by nteechar          #+#    #+#              #
-#    Updated: 2024/11/16 21:30:41 by nteechar         ###   ########.fr        #
+#    Updated: 2024/11/27 19:00:44 by pesrisaw         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ RESET := \033[0m
 
 # commands
 CC := cc
-CFLAGS := -Wall -Wextra -Werror
+CFLAGS := -Wall -Wextra -Werror -g
 RM := rm -rf
 AR := ar rcs
 

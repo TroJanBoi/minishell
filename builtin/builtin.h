@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 12:32:16 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/20 17:59:27 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/11/27 15:06:56 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTIN_H
 # define BUILTIN_H
 
-# include "../parse_line/create_commands/command.h"
+# include "../parser/create_commands/command.h"
 # include "../setup/setup.h"
 
 extern int		g_signal_global;
@@ -34,9 +34,7 @@ t_exit_status	builtin_env(int argc, char **argv, t_shell_data *data);
 t_exit_status	builtin_export(int argc, char **argv, t_shell_data *data);
 t_exit_status	builtin_unset(int argc, char **argv, t_shell_data *data);
 
-// exit and free everything
-void			builtin_exit(t_command *command, t_shell_data *data);
-void			builtin_exit_0(t_shell_data *data);
-void			builtin_exit_2(t_list **cmd_lst, t_shell_data *data);
+// free everything and exit
+void			builtin_exit(int argc, char **argv, t_shell_data *data);
 
 #endif

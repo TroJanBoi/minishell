@@ -6,19 +6,41 @@
 /*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 04:43:59 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/26 19:17:51 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/12/05 14:11:07 by pesrisaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
+#include <fcntl.h>
+#include <unistd.h>
 
 void	handle_redir_input_output(t_list *cmd_lst);
+
+void	close_unused_fds(void)
+{
+	for (int fd = 3; fd < 1024; fd++) // ปิด fd ตั้งแต่ 3 ขึ้นไป
+	{
+		if (fcntl(fd, F_GETFD) != -1) // ตรวจสอบว่า fd ถูกเปิดหรือไม่
+			close(fd); // ปิด fd ที่ไม่ต้องใช้
+	}
+}
+
+void debug_fds(void)
+{
+	for (int fd = 0; fd < 1024; fd++)
+	{
+		if (fcntl(fd, F_GETFD) != -1)
+			printf("FD %d is open\n", fd);
+	}
+}
 
 static void	execute(char **cmd, t_list *env_var_list)
 {
 	char	*path;
 	char	**envp;
 
+	if (!cmd || !cmd[0])
+		exit(ISSUE_PATH);
 	if (ft_strchr(cmd[0], '/'))
 	{
 		if (access(cmd[0], X_OK) == SUCCESS)
@@ -27,10 +49,10 @@ static void	execute(char **cmd, t_list *env_var_list)
 			return (command_not_found(cmd[0], STDERR_FILENO));
 	}
 	else
-		path = find_path("PATH", env_var_list, cmd[0]);
+			path = find_path("PATH", env_var_list, cmd[0]);
 	if (path == NULL)
 		return (command_not_found(cmd[0], STDERR_FILENO));
-	envp = get_envp(env_var_list);
+	envp = get_envp_arr(env_var_list);
 	if (envp == NULL)
 	{
 		ft_free_str_arr(envp, 0);
@@ -38,6 +60,7 @@ static void	execute(char **cmd, t_list *env_var_list)
 	}
 	if (execve(path, cmd, envp) == -1)
 	{
+		free(path);
 		ft_free_str_arr(envp, 0);
 		exit(ISSUE_PATH);
 	}
@@ -65,7 +88,8 @@ void	ft_childprocess(t_list *cmd_lst, int *prev_fd, t_shell_data *envp)
 		handle_redir_input_output(cmd_lst);
 	if (is_builtin_name(cmd->command->argv[0]))
 	{
-		envp->exit_status = execute_builtin(cmd->command, envp);
+		if (cmd->command)
+			envp->exit_status = execute_builtin(cmd->command, envp);
 		exit(envp->exit_status);
 	}
 	else
