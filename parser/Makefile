@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+         #
+#    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/06 12:35:51 by nteechar          #+#    #+#              #
-#    Updated: 2024/11/27 19:00:47 by pesrisaw         ###   ########.fr        #
+#    Updated: 2024/11/27 12:41:24 by nteechar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = parser.a
 
 # commands
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -rf
 AR = ar rcs
 

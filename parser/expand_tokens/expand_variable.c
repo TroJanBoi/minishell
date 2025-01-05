@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 17:01:46 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/27 14:09:23 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/12/10 17:49:25 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	expand_variable(t_list *cur_node, t_shell_data *data)
 	else
 	{
 		key = subtoken->str + 1;
-		env_var_node = find_env_var(key, data->env_var_list);
+		env_var_node = find_env_var_node(key, data->env_var_list);
 		if (env_var_node)
 			value = ft_strdup(((t_env_var *) env_var_node->content)->value);
 		else

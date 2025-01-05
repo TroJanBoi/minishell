@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_envp.c                                         :+:      :+:    :+:   */
+/*   get_envp_arr.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 16:45:17 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/26 14:31:41 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/12/11 13:53:33 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ char	**get_envp_arr(t_env_var_list *env_var_list)
 	while (env_var_list)
 	{
 		env_var = env_var_list->content;
-		arr[i] = ft_strjoin_all(3, env_var->key, "=", env_var->value);
+		if (env_var->value)
+			arr[i] = ft_strjoin_all(3, env_var->key, "=", env_var->value);
+		else
+			arr[i] = ft_strjoin_all(3, env_var->key, "=", "");
 		if (arr[i] == NULL)
 		{
 			ft_free_str_arr(arr, i);

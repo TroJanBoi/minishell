@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_not_found.c                                :+:      :+:    :+:   */
+/*   ft_getcwd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/17 18:20:02 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/27 13:45:31 by nteechar         ###   ########.fr       */
+/*   Created: 2024/12/11 16:25:13 by nteechar          #+#    #+#             */
+/*   Updated: 2024/12/11 16:25:21 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "execute.h"
+#include "builtin.h"
 
-void	command_not_found(char *cmd, int fd)
+#define AS_BIG_AS_NECESSARY 0
+
+// return dynamically alloc'ed string of current path
+char	*ft_getcwd(void)
 {
-	ft_putstr_fd(cmd, fd);
-	ft_putendl_fd(": command not found", fd);
-	// free everything
-	exit(ISSUE_PATH);
+	char	*path;
+
+	path = getcwd(NULL, AS_BIG_AS_NECESSARY);
+	if (path == NULL)
+		return (NULL);
+	return (path);
 }

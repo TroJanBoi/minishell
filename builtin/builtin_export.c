@@ -6,42 +6,89 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 12:33:51 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/27 14:41:37 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:11:40 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <errno.h>
+#include <stdio.h>
 #include "builtin.h"
 #include "../libft/libft.h"
 #include "../env_var/env_var.h"
 
-#define NOT_A_VALID_KEY 1
-
-static int	export_single_var(char *env_var_line, t_shell_data *data)
+static void	sort_envp_arr(char **arr)
 {
-	char		**key_value_pair;
-	char		*key;
-	char		*value;
-	t_list		*node;
+	int		i;
+	int		j;
+	char	*temp;
 
-	if (ft_strchr(env_var_line, '='))
+	i = 0;
+	while (arr[i + 1])
 	{
-		key_value_pair = split_env_var_line(env_var_line);
+		j = i + 1;
+		while (arr[j])
+		{
+			if (ft_strcmp(arr[i], arr[j]) > 0)
+			{
+				temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+static int	print_declared_variables(t_env_var_list *list)
+{
+	char	**arr;
+	int		i;
+	char	**key_value;
+
+	arr = get_envp_arr(list);
+	if (arr == NULL)
+		return (ERROR);
+	sort_envp_arr(arr);
+	i = 0;
+	while (arr[i])
+	{
+		key_value = split_env_var_line(arr[i]);
+		if (ft_strlen(key_value[1]) == 0)
+			arr[i][ft_strlen(arr[i]) - 1] = '\0';
+		printf("declare -x %s\n", arr[i]);
+		ft_free_str_arr(key_value, 2);
+		i++;
+	}
+	ft_free_str_arr(arr, 0);
+	return (SUCCESS);
+}
+
+static int	export_single_var(char *key_value_str, t_shell_data *data)
+{
+	char	**key_value_pair;
+	char	*key_str;
+	t_list	*node;
+
+	if (ft_strchr(key_value_str, '='))
+	{
+		key_value_pair = split_env_var_line(key_value_str);
 		if (key_value_pair == NULL)
 			return (ENOMEM);
-		key = key_value_pair[0];
-		value = key_value_pair[1];
-		if (!is_valid_key(key))
-			return (NOT_A_VALID_KEY);
-		node = set_env_var(key, value, &data->env_var_list);
+		if (!is_valid_key(key_value_pair[0]))
+			return (ERROR);
+		node = set_env_var(key_value_pair[0], key_value_pair[1],
+				&data->env_var_list);
 		ft_free_str_arr(key_value_pair, 2);
 		if (node == NULL)
 			return (ENOMEM);
 	}
 	else
 	{
-		if (!is_valid_key(env_var_line))
-			return (NOT_A_VALID_KEY);
+		key_str = key_value_str;
+		if (!is_valid_key(key_str))
+			return (ERROR);
+		set_env_var(key_str, NULL, &data->env_var_list);
 	}
 	return (SUCCESS);
 }
@@ -59,17 +106,16 @@ t_exit_status	builtin_export(int argc, char **argv, t_shell_data *data)
 	int				export_status;
 	int				i;
 
+	if (argc == 1)
+		return (print_declared_variables(data->env_var_list));
 	ret = SUCCESS;
 	i = 1;
 	while (i < argc)
 	{
 		export_status = export_single_var(argv[i], data);
 		if (export_status == ENOMEM)
-		{
-			ret = ENOMEM;
-			break ;
-		}
-		else if (export_status == NOT_A_VALID_KEY)
+			return (ENOMEM);
+		else if (export_status == ERROR)
 		{
 			ret = ERROR;
 			ft_putstr_fd("minishell: export: '", STDERR_FILENO);

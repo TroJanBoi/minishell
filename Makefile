@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+         #
+#    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/27 11:52:43 by nteechar          #+#    #+#              #
-#    Updated: 2024/11/27 16:46:52 by pesrisaw         ###   ########.fr        #
+#    Updated: 2024/12/10 10:16:40 by nteechar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ RESET = \033[0m
 MAKEFLAGS += --no-print-directory
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -rf
 
 # files

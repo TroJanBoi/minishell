@@ -6,12 +6,26 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 16:46:57 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/25 16:47:05 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/12/11 13:38:49 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../env_var.h"
 
+static int	assign_value(t_env_var *var, char *value)
+{
+	if (value == NULL)
+	{
+		var->value = NULL;
+		return (SUCCESS);
+	}
+	var->value = ft_strdup(value);
+	if (var->value == NULL)
+		return (ERROR);
+	return (SUCCESS);
+}
+
+// can have "value == NULL" if only key is declared
 t_env_var	*create_env_var(char *key, char *value)
 {
 	t_env_var	*var;
@@ -25,13 +39,9 @@ t_env_var	*create_env_var(char *key, char *value)
 		free(var);
 		return (NULL);
 	}
-	if (value)
-		var->value = ft_strdup(value);
-	else
-		var->value = ft_strdup("");
-	if (var->value == NULL)
+	if (assign_value(var, value) != SUCCESS)
 	{
-		free(var->value);
+		free(var->key);
 		free(var);
 		return (NULL);
 	}

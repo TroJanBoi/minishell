@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+         #
+#    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/06 13:24:14 by nteechar          #+#    #+#              #
-#    Updated: 2024/12/05 14:19:15 by pesrisaw         ###   ########.fr        #
+#    Updated: 2024/12/06 16:50:03 by nteechar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = execute.a
 
 # commands
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -rf
 AR = ar rcs
 
@@ -25,8 +25,8 @@ HEADERS = execute.h
 
 SRCS = setup_cmd_list.c find_path.c join_path.c run_heredocs.c \
 	wait_for_all_processes.c ft_childprocess.c handle_redir_input_output.c \
-	check_infiles.c execute.c command_not_found.c ft_parentprocess.c single_builtin.c \
-	__debugging.c
+	check_infiles.c execute.c ft_parentprocess.c single_builtin.c
+
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
 # phony rules

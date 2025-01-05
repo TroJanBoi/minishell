@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 15:01:31 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/27 15:15:25 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:21:33 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 // Courtesy of ChatGPT
 /* for not echoing {^C, ^\} - call when init minishell*/
-void	disable_sigquit_echo(void)
+void	disable_echo_cntl(void)
 {
 	struct termios	term;
 

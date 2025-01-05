@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+         #
+#    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/07 18:57:57 by nteechar          #+#    #+#              #
-#    Updated: 2024/11/27 19:00:49 by pesrisaw         ###   ########.fr        #
+#    Updated: 2024/12/09 17:21:58 by nteechar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = setup.a
 
 # commands
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -rf
 AR = ar rcs
 

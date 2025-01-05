@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_line.h                                       :+:      :+:    :+:   */
+/*   find_env_var_node.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/07 18:39:48 by nteechar          #+#    #+#             */
-/*   Updated: 2024/12/06 17:30:16 by nteechar         ###   ########.fr       */
+/*   Created: 2024/12/10 17:45:24 by nteechar          #+#    #+#             */
+/*   Updated: 2024/12/10 17:45:30 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSE_LINE_H
-# define PARSE_LINE_H
+#include "../env_var.h"
 
-# include "../setup/shell_data.h"
+// return ptr to the env_var's node having "key"
+t_env_var_list	*find_env_var_node(char *key, t_env_var_list *env_var_list)
+{
+	t_env_var	*var;
 
-# include "tokenize/token.h"
-# include "create_commands/command.h"
-
-int	parse_line(char *line, t_shell_data *data,
-		t_command_list **commands);
-
-#endif
+	while (env_var_list)
+	{
+		var = env_var_list->content;
+		if (ft_strcmp(var->key, key) == 0)
+			return (env_var_list);
+		env_var_list = env_var_list->next;
+	}
+	return (NULL);
+}

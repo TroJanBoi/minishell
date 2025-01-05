@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wait_for_all_processes.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 02:14:34 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/20 17:43:30 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/12/06 16:55:42 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 int	wait_for_all_processes(t_list *cmd_lst)
 {
+	int			status;
 	int			exit_status;
 	t_execute	*cmd;
-	int			status;
 
+	status = SUCCESS;
 	exit_status = SUCCESS;
 	while (cmd_lst)
 	{

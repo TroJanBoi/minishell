@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_heredocs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 22:35:24 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/20 17:42:42 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/12/10 09:57:05 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	get_inputs(char *delimiter)
 		line = readline("> ");
 		if (line == NULL)
 			break ;
-		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
+		if (ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
 			break ;

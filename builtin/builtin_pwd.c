@@ -6,14 +6,12 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 12:33:45 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/16 17:46:31 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:57:55 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft/libft.h"
+#include <stdio.h>
 #include "builtin.h"
-
-#define AS_BIG_AS_NECESSARY 0
 
 // print current working directory
 t_exit_status	builtin_pwd(int argc, char **argv, t_shell_data *data)
@@ -22,14 +20,20 @@ t_exit_status	builtin_pwd(int argc, char **argv, t_shell_data *data)
 
 	(void) argc;
 	(void) argv;
-	(void) data;
-	path = getcwd(NULL, AS_BIG_AS_NECESSARY);
-	if (path == NULL)
+	path = get_env_value("PWD", data->env_var_list);
+	if (path)
 	{
-		ft_putstr_fd("builtin_pwd: getcwd\n", STDERR_FILENO);
-		return (ERROR);
+		printf("%s\n", path);
+		return (SUCCESS);
 	}
-	ft_printf("%s\n", path);
-	free(path);
+	path = ft_getcwd();
+	if (path)
+	{
+		printf("%s\n", path);
+		free(path);
+		return (SUCCESS);
+	}
+	path = ".";
+	printf("%s\n", path);
 	return (SUCCESS);
 }

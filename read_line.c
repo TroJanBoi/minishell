@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 18:42:36 by nteechar          #+#    #+#             */
-/*   Updated: 2024/12/05 14:37:12 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:46:37 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,24 @@
 #include "readline/history.h"
 #include "libft/libft.h"
 #include "setup/shell_data.h"
+#include "builtin/builtin.h"
 
-#define AS_BIG_AS_NECESSARY 0
+#define RED "\1\033[31m\2"
+#define UNDERLINE_RED "\1\033[4;31m\2"
+#define RESET "\1\033[0m\2"
 
-// minishell with red 's' and red+underline 'hell'
-#define MINISHELL "\2mini\1\033[31m\2s\1\033[0m\033[4;31m\2hell\1\033[0m\2"
-
-static char	*get_prompt(void)
+// display minishell with red 's' and red+underline 'hell'!
+static char	*get_prompt(t_shell_data *data)
 {
 	char	*path;
 	char	*prompt;
 
-	path = getcwd(NULL, AS_BIG_AS_NECESSARY);
+	path = get_env_value("PWD", data->env_var_list);
 	if (path == NULL)
-		return (NULL);
-	prompt = ft_strjoin_all(4, MINISHELL, ":", path, "$ ");
-	free(path);
+		path = ".";
+	prompt = ft_strjoin_all(10, \
+		"mini", RED, "s", RESET, UNDERLINE_RED, "hell", RESET, \
+		":", path, "$ ");
 	if (prompt == NULL)
 		return (NULL);
 	return (prompt);
@@ -41,18 +43,16 @@ static char	*get_line(t_shell_data *data)
 	char	*prompt;
 	char	*line;
 
-	prompt = get_prompt();
+	prompt = get_prompt(data);
 	if (prompt == NULL)
 	{
 		data->exit_status = ENOMEM;
 		return (NULL);
 	}
-	// line = readline(prompt);
-	line = get_next_line(STDIN_FILENO);
+	line = readline(prompt);
 	free(prompt);
 	if (line == NULL)
 		return (NULL);
-	line[ft_strlen(line) - 1] = '\0';
 	return (line);
 }
 

@@ -6,11 +6,10 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 10:38:43 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/27 15:32:52 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:51:31 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -23,16 +22,19 @@ static void	ft_sigint(int signal)
 {
 	if (signal != SIGINT)
 		return ;
-	if (g_signal_global == READ_MODE)
+	if (g_signal == EXECUTE_MODE)
 	{
-		ft_putstr_fd("\n^C\n", STDOUT_FILENO);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
+		ft_putstr_fd("\n", STDOUT_FILENO);
 	}
 	else
 	{
+		rl_on_new_line();
+		rl_redisplay();
 		ft_putstr_fd("^C\n", STDOUT_FILENO);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+		g_signal = 128 + signal;
 	}
 }
 
@@ -40,35 +42,30 @@ static void	ft_sigquit(int signal)
 {
 	if (signal != SIGQUIT)
 		return ;
-	if (g_signal_global == READ_MODE)
+	if (g_signal == EXECUTE_MODE)
 	{
-		rl_replace_line("", 0);
-        rl_on_new_line();
-        rl_redisplay();
+		ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 	}
 	else
 	{
-		ft_putstr_fd("^\\Quit (core dumped)\n", STDIN_FILENO);
-		rl_replace_line("", 0);
 		rl_on_new_line();
+		rl_redisplay();
 	}
 }
 
-static void	set_signal_handler(struct sigaction *act,
-	void (*func)(int), int signal)
+static void	set_signal_action(int signum, void (*func)(int), int flags)
 {
-	ft_bzero(act, sizeof(struct sigaction));
-	sigemptyset(&act->sa_mask);
-	act->sa_handler = func;
-	act->sa_flags = SA_RESTART;
-	sigaction(signal, act, 0);
+	struct sigaction	sa;
+
+	ft_bzero(&sa, sizeof(sa));
+	sa.sa_handler = func;
+	sa.sa_flags = flags;
+	if (sigemptyset(&sa.sa_mask) < 0 || sigaction(signum, &sa, NULL) < 0)
+		ft_putstr_fd("set_signal_action\n", STDERR_FILENO);
 }
 
 void	setup_signal(void)
 {
-	struct sigaction	act_int;
-	struct sigaction	act_quit;
-
-	set_signal_handler(&act_int, ft_sigint, SIGINT);
-	set_signal_handler(&act_quit, ft_sigquit, SIGQUIT);
+	set_signal_action(SIGQUIT, ft_sigquit, SA_RESTART);
+	set_signal_action(SIGINT, ft_sigint, SA_RESTART | SA_SIGINFO);
 }

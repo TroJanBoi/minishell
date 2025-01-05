@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   colors.h                                           :+:      :+:    :+:   */
+/*   get_env_value.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/20 17:05:01 by nteechar          #+#    #+#             */
-/*   Updated: 2024/09/20 17:05:22 by nteechar         ###   ########.fr       */
+/*   Created: 2024/11/11 15:39:58 by nteechar          #+#    #+#             */
+/*   Updated: 2024/12/10 17:48:55 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COLORS_H
-# define COLORS_H
+#include "../env_var.h"
 
-# define RESET "\033[0m"
-# define GREY "\033[30m"
-# define RED "\033[31m"
-# define GREEN "\033[32m"
-# define YELLOW "\033[33m"
-# define BLUE "\033[34m"
-# define PURPLE "\033[35m"
-# define CYAN "\033[36m"
+// search <key>, return ptr to <value>
+char	*get_env_value(char *key, t_env_var_list *env_var_list)
+{
+	t_env_var_list	*node;
+	t_env_var		*var;
 
-#endif
+	node = find_env_var_node(key, env_var_list);
+	if (node == NULL)
+		return (NULL);
+	var = node->content;
+	return (var->value);
+}

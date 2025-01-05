@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 17:23:20 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/11/20 01:27:10 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/12/10 17:49:22 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ char	*find_path(char *key, t_list *env_var_lst, char *cmd)
 
 	if (!key || !env_var_lst)
 		return (NULL);
-	path_node = find_env_var(key, env_var_lst);
+	path_node = find_env_var_node(key, env_var_lst);
+	if (!path_node)
+		return (NULL);
 	env_var = (t_env_var *)path_node->content;
 	full_path = ft_split(env_var->value, ':');
 	path = join_path(full_path, cmd);

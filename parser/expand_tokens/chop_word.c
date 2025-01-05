@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:23:40 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/27 14:36:14 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:19:27 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,25 @@ static t_subtoken_type	get_type(char *word)
 	{
 		if (word[1] == '?')
 			return (EXIT_STATUS);
-		else
+		if (ft_isalpha(word[1]) || word[1] == '_')
 			return (VARIABLE);
 	}
 	return (NORMAL);
+}
+
+static int	get_length_of_normal_subtoken(char *word)
+{
+	int	i;
+
+	i = 0;
+	if (word[i] == '$')
+		i++;
+	else
+	{
+		while (word[i] && !ft_isinset(word[i], "\'\"$", 3))
+			i++;
+	}
+	return (i);
 }
 
 static char	*extract_substring(char *word, t_subtoken_type type)
@@ -42,17 +57,14 @@ static char	*extract_substring(char *word, t_subtoken_type type)
 		if (ft_isalpha(word[i]) || word[i] == '_')
 		{
 			i++;
-			while (ft_isalnum(word[i] || word[i] == '_'))
+			while (ft_isalnum(word[i]) || word[i] == '_')
 				i++;
 		}
 	}
 	else if (type == EXIT_STATUS)
 		i += 2;
 	else
-	{
-		while (word[i] && !ft_isinset(word[i], "\'\"$", 3))
-			i++;
-	}
+		i += get_length_of_normal_subtoken(word);
 	return (ft_substr(word, 0, i));
 }
 

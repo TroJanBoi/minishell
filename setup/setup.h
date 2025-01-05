@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 18:57:55 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/27 15:30:20 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:21:12 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@
 # include "shell_data.h"
 
 # define READ_MODE 0
-# define EXECUTE_MODE 1
+# define EXECUTE_MODE -1
 
 t_shell_data	*init_minishell(int argc, char **argv, char **envp);
 
-void			disable_sigquit_echo(void);
+void			disable_echo_cntl(void);
 void			restore_terminal_settings(void);
+
+void			setup_signal(void);
 
 #endif

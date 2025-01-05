@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_childprocess.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 04:43:59 by nteechar          #+#    #+#             */
-/*   Updated: 2024/12/05 14:11:07 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/12/07 14:33:51 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,63 +16,8 @@
 
 void	handle_redir_input_output(t_list *cmd_lst);
 
-void	close_unused_fds(void)
+static void	do_redirs(t_list *cmd_lst, t_execute *cmd, int *prev_fd)
 {
-	for (int fd = 3; fd < 1024; fd++) // ปิด fd ตั้งแต่ 3 ขึ้นไป
-	{
-		if (fcntl(fd, F_GETFD) != -1) // ตรวจสอบว่า fd ถูกเปิดหรือไม่
-			close(fd); // ปิด fd ที่ไม่ต้องใช้
-	}
-}
-
-void debug_fds(void)
-{
-	for (int fd = 0; fd < 1024; fd++)
-	{
-		if (fcntl(fd, F_GETFD) != -1)
-			printf("FD %d is open\n", fd);
-	}
-}
-
-static void	execute(char **cmd, t_list *env_var_list)
-{
-	char	*path;
-	char	**envp;
-
-	if (!cmd || !cmd[0])
-		exit(ISSUE_PATH);
-	if (ft_strchr(cmd[0], '/'))
-	{
-		if (access(cmd[0], X_OK) == SUCCESS)
-			path = ft_strdup(cmd[0]);
-		else
-			return (command_not_found(cmd[0], STDERR_FILENO));
-	}
-	else
-			path = find_path("PATH", env_var_list, cmd[0]);
-	if (path == NULL)
-		return (command_not_found(cmd[0], STDERR_FILENO));
-	envp = get_envp_arr(env_var_list);
-	if (envp == NULL)
-	{
-		ft_free_str_arr(envp, 0);
-		exit(EXIT_FAILURE);
-	}
-	if (execve(path, cmd, envp) == -1)
-	{
-		free(path);
-		ft_free_str_arr(envp, 0);
-		exit(ISSUE_PATH);
-	}
-}
-
-void	ft_childprocess(t_list *cmd_lst, int *prev_fd, t_shell_data *envp)
-{
-	t_execute	*cmd;
-
-	cmd = cmd_lst->content;
-	if (check_infiles(cmd->command->redirs) == ERROR)
-		exit(EXIT_FAILURE);
 	if (cmd_lst->next)
 	{
 		dup2(cmd->pipe_fds[1], STDOUT_FILENO);
@@ -86,12 +31,71 @@ void	ft_childprocess(t_list *cmd_lst, int *prev_fd, t_shell_data *envp)
 	}
 	if (cmd->command->redirs)
 		handle_redir_input_output(cmd_lst);
-	if (is_builtin_name(cmd->command->argv[0]))
+}
+
+static void	free_cmd_lst_if_exit(t_list **cmd_lst_first, t_command *command)
+{
+	t_list		*next;
+	t_execute	*cmd;
+
+	while (*cmd_lst_first)
 	{
-		if (cmd->command)
-			envp->exit_status = execute_builtin(cmd->command, envp);
-		exit(envp->exit_status);
+		next = (*cmd_lst_first)->next;
+		cmd = (*cmd_lst_first)->content;
+		if (cmd->command == command)
+			ft_lstdelone(*cmd_lst_first, free);
+		else
+			ft_lstdelone(*cmd_lst_first, free_execute_command);
+		*cmd_lst_first = next;
 	}
+}
+
+static int	execute(char **cmd, t_list *env_var_list)
+{
+	char	*path;
+	char	**envp;
+
+	if (!cmd || !cmd[0])
+		return (SUCCESS);
+	if (ft_strchr(cmd[0], '/') && access(cmd[0], X_OK) == SUCCESS)
+		path = ft_strdup(cmd[0]);
 	else
-		execute(cmd->command->argv, envp->env_var_list);
+		path = find_path("PATH", env_var_list, cmd[0]);
+	if (path == NULL)
+	{
+		ft_putstr_fd(cmd[0], STDERR_FILENO);
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+		return (ISSUE_PATH);
+	}
+	envp = get_envp_arr(env_var_list);
+	if (envp == NULL)
+		return (ERROR);
+	if (execve(path, cmd, envp) == -1)
+	{
+		free(path);
+		ft_free_str_arr(envp, 0);
+		return (ISSUE_PATH);
+	}
+	return (SUCCESS);
+}
+
+// return exit status
+int	ft_childprocess(t_list **cmd_lst_first, t_list *cmd_lst,
+		int *prev_fd, t_shell_data *envp)
+{
+	t_execute	*cmd;
+	t_command	*command;
+
+	cmd = cmd_lst->content;
+	command = cmd->command;
+	if (check_infiles(command->redirs) == ERROR)
+		return (ERROR);
+	do_redirs(cmd_lst, cmd, prev_fd);
+	if (is_builtin_name(command->argv[0]))
+	{
+		if (ft_strcmp(command->argv[0], "exit") == 0)
+			free_cmd_lst_if_exit(cmd_lst_first, command);
+		return (execute_builtin(command, envp));
+	}
+	return (execute(command->argv, envp->env_var_list));
 }

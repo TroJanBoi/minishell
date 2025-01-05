@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+         #
+#    By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/04 19:13:22 by nteechar          #+#    #+#              #
-#    Updated: 2024/11/27 19:00:33 by pesrisaw         ###   ########.fr        #
+#    Updated: 2024/12/11 16:26:33 by nteechar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = builtin.a
 
 # commands
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 RM = rm -rf
 AR = ar rcs
 
@@ -34,6 +34,7 @@ SRCS = \
 	\
 	execute_builtin.c \
 	is_builtin_name.c \
+	ft_getcwd.c
 
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 

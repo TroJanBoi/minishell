@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup_cmd_list.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:11:30 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/20 17:42:59 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/12/06 16:56:57 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,22 @@ static void	*make_execute_command(void *command)
 	if (cmd == NULL)
 		return (NULL);
 	cmd->command = command;
-	cmd->fd_in = -1;
-	cmd->fd_out = -1;
 	cmd->pipe_fds[0] = -1;
 	cmd->pipe_fds[1] = -1;
+	cmd->fd_prev = -1;
+	cmd->fd_in = -1;
+	cmd->fd_out = -1;
 	cmd->fd_heredoc = -1;
+	cmd->pid = -1;
 	return (cmd);
 }
 
-static void	free_execute_command(void *execute_command)
+void	free_execute_command(void *execute_command)
 {
 	t_execute	*cmd;
 
 	cmd = execute_command;
-	free(cmd->command);
+	free_command(cmd->command);
 	free(cmd);
 }
 

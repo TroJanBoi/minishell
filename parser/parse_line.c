@@ -6,7 +6,7 @@
 /*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:26:18 by nteechar          #+#    #+#             */
-/*   Updated: 2024/11/27 14:10:18 by nteechar         ###   ########.fr       */
+/*   Updated: 2024/12/07 15:58:37 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,48 +25,28 @@ int				is_grammar_correct(t_list *tokens);
 
 t_command_list	*create_command_list(t_list *tokens);
 
-static int	preliminary_check(char *line, t_shell_data *data)
-{
-	if (ft_strlen(line) == 0)
-		return (STOP);
-	else if (!is_quote_closed(line))
-	{
-		data->exit_status = EINVAL;
-		return (STOP);
-	}
-	return (KEEP_PARSING);
-}
-
 static int	process_line_into_tokens(char *line, t_list	**tokens, \
 	t_shell_data *data)
 {
 	*tokens = tokenize_line(line);
 	if (*tokens == NULL)
-	{
-		data->exit_status = ENOMEM;
-		return (STOP);
-	}
+		return (ENOMEM);
 	expand_tokens(tokens, data);
 	if (*tokens == NULL)
-	{
-		data->exit_status = ENOMEM;
-		return (STOP);
-	}
+		return (ENOMEM);
 	return (KEEP_PARSING);
 }
 
 // if syntax error: free tokens, and tell the parser to stop
-static int	check_syntax(t_token_list **tokens, t_shell_data *data)
+static int	check_syntax(t_token_list **tokens)
 {
-	if (is_grammar_correct(*tokens))
-		return (KEEP_PARSING);
-	else
+	if (!is_grammar_correct(*tokens))
 	{
 		ft_putstr_fd("minishell: syntax error\n", STDERR_FILENO);
 		ft_lstclear(tokens, free_token);
-		data->exit_status = EINVAL;
-		return (STOP);
+		return (EINVAL);
 	}
+	return (KEEP_PARSING);
 }
 
 // process line, check syntax (and set error_code accordingly)
@@ -74,24 +54,28 @@ static int	check_syntax(t_token_list **tokens, t_shell_data *data)
 // else: data->command_list = NULL
 //
 // assume result is SUCCESS unless find error afterward
-t_command_list	*parse_line(char *line, t_shell_data *data)
+int	parse_line(char *line, t_shell_data *data,
+	t_command_list **commands)
 {
-	t_command_list	*commands;
 	t_token_list	*tokens;
+	int				ret;
 
-	data->exit_status = SUCCESS;
-	if (preliminary_check(line, data) != KEEP_PARSING)
-		return (NULL);
-	if (process_line_into_tokens(line, &tokens, data) != KEEP_PARSING)
-		return (NULL);
-	if (check_syntax(&tokens, data) != KEEP_PARSING)
-		return (NULL);
-	commands = create_command_list(tokens);
+	if (ft_strlen(line) == 0)
+		return (SUCCESS);
+	else if (!is_quote_closed(line))
+	{
+		ft_putstr_fd("minishell: quote error\n", STDERR_FILENO);
+		return (EINVAL);
+	}
+	ret = process_line_into_tokens(line, &tokens, data);
+	if (ret != KEEP_PARSING)
+		return (ret);
+	ret = check_syntax(&tokens);
+	if (ret != KEEP_PARSING)
+		return (ret);
+	*commands = create_command_list(tokens);
 	ft_lstclear(&tokens, free_token);
 	if (commands == NULL)
-	{
-		data->exit_status = ENOMEM;
-		return (NULL);
-	}
-	return (commands);
+		return (ENOMEM);
+	return (SUCCESS);
 }

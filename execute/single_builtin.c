@@ -3,30 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   single_builtin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pesrisaw <pesrisaw@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: nteechar <techazuza@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 17:32:21 by pesrisaw          #+#    #+#             */
-/*   Updated: 2024/12/02 17:30:18 by pesrisaw         ###   ########.fr       */
+/*   Updated: 2024/12/07 11:32:40 by nteechar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execute.h"
 
-void			handle_redir_input_output(t_list *cmd_lst);
-t_exit_status	p_execute_built(t_command *cmd, t_shell_data *data);
-int				is_p_builtin_name(char *name);
+void	handle_redir_input_output(t_list *cmd_lst);
 
-int	s_builtin(t_list *cmd_lst, t_execute *cmd, t_shell_data *envp)
+int	single_builtin(t_list *cmd_lst, t_shell_data *envp)
 {
-	if (ft_lstsize(cmd_lst) == 1 && cmd->command->argv[0] != NULL)
+	t_execute	*cmd_with_fds;
+	t_command	*cmd;
+
+	cmd_with_fds = cmd_lst->content;
+	cmd = cmd_with_fds->command;
+	if (ft_lstsize(cmd_lst) != 1)
+		return (ERROR);
+	else if (cmd->argv[0] == NULL)
+		return (ERROR);
+	else if (!is_p_builtin_name(cmd->argv[0]))
+		return (ERROR);
+	if (cmd->redirs)
+		handle_redir_input_output(cmd_lst);
+	if (ft_strcmp(cmd->argv[0], "exit") == 0 && cmd->argc <= 2)
 	{
-		if (is_p_builtin_name(cmd->command->argv[0]))
-		{
-			if (cmd->command->redirs)
-				handle_redir_input_output(cmd_lst);
-			envp->exit_status = p_execute_built(cmd->command, envp);
-			return (SUCCESS);
-		}
+		free(cmd_lst);
+		free(cmd_with_fds);
 	}
-	return (ERROR);
+	envp->exit_status = p_execute_built(cmd, envp);
+	return (SUCCESS);
 }
